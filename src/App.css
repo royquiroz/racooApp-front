@@ -30,3 +30,42 @@
     transform: rotate(360deg);
   }
 }
+
+.container {
+  padding: 4%;
+}
+
+.root {
+  flex-grow: 1;
+}
+
+.grow {
+  flex-grow: 1;
+}
+
+.auth {
+  padding: 5%;
+}
+
+.button {
+  margin-top: 2% !important;
+}
+
+.avatar {
+  margin: 10;
+  width: 60;
+  height: 60;
+}
+
+.drawerList {
+  width: 250px;
+}
+
+.logoAuth {
+  width: 150px;
+  margin-top: 5px;
+}
+
+.logoMenu {
+  width: 125px;
+}
