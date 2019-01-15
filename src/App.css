@@ -32,7 +32,7 @@
 }
 
 .container {
-  padding: 4%;
+  padding: 2% 4%;
 }
 
 .root {
@@ -68,4 +68,10 @@
 
 .logoMenu {
   width: 125px;
+}
+
+.fab {
+  position: absolute !important;
+  bottom: 5%;
+  right: 2%;
 }

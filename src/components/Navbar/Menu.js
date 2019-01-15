@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { NavLink } from "react-router-dom";
 import {
   Drawer,
   List,
@@ -55,7 +56,7 @@ class ListMenu extends Component {
               <ListSubheader>
                 <img src={Logo} alt="logo" className="logoMenu" />
               </ListSubheader>
-              <ListItem button>
+              <ListItem component={NavLink} to="/companies">
                 <ListItemIcon>
                   <BusinessCenterTwoTone />
                 </ListItemIcon>

@@ -5,10 +5,10 @@ const base_url =
     ? "http://localhost:3000/api"
     : "https://spacio.herokuapp.com/api";
 
-/*const headers = {
+const headers = {
   "Content-Type": "multipart/form-data",
   "x-access-token": localStorage.getItem("token")
-};*/
+};
 
 export const register = auth => {
   return axios
@@ -36,6 +36,44 @@ export const login = auth => {
       return {
         error: false,
         msg: "Haz iniciado de sesión correctamente"
+      };
+    })
+    .catch(err => {
+      return {
+        error: err.response.status,
+        msg: err.response.data.msg
+      };
+    });
+};
+
+export const getCompanies = () => {
+  return axios
+    .get(`${base_url}/company`, { headers })
+    .then(res => {
+      console.log(res);
+      return {
+        error: false,
+        companies: res.data.companies,
+        msg: `${res.data.companies.length} Compañias encontradas exitosamente`
+      };
+    })
+    .catch(err => {
+      return {
+        error: err.response.status,
+        msg: err.response.data.msg
+      };
+    });
+};
+
+export const getCompanyId = Id => {
+  return axios
+    .get(`${base_url}/company/${Id}`, { headers })
+    .then(res => {
+      console.log(res);
+      return {
+        error: false,
+        company: res.data.company,
+        msg: "Compañia encontradas exitosamente"
       };
     })
     .catch(err => {
