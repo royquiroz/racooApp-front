@@ -75,3 +75,7 @@
   bottom: 5%;
   right: 2%;
 }
+
+.modalForm {
+  margin-left: 25px !important;
+}

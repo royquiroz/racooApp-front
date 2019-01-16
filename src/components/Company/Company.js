@@ -7,6 +7,7 @@ import {
   DialogContent,
   FormControlLabel,
   Switch,
+  TextField,
   Button
 } from "@material-ui/core";
 import { Add } from "@material-ui/icons";
@@ -38,9 +39,21 @@ class Company extends Component {
     this.setState({ openModal: false });
   };
 
+  handleChangeKind = e => {
+    const { company } = this.state;
+
+    e.target.checked ? (company.kind = "COMPANY") : (company.kind = "NOTARY");
+    this.setState({ company: company });
+  };
+
   handleChange = e => {
-    console.log(e.target.name);
-    console.log(e.target.checked);
+    const { company } = this.state;
+
+    let field = e.target.name;
+    company[field] = e.target.value;
+
+    console.log(company);
+    this.setState({ company: company });
   };
 
   render() {
@@ -60,16 +73,40 @@ class Company extends Component {
             <Add />
           </Fab>
         </Grid>
-        <Dialog onClose={this.handleClose} open={openModal}>
+        <Dialog onClose={this.handleClose} open={openModal} scroll="body">
           <DialogTitle onClose={this.handleClose}>Nueva Compañia</DialogTitle>
           <DialogContent>
-            <FormControlLabel
-              control={<Switch name="kind" onChange={this.handleChange} />}
-              label="Compañia"
-            />
-            <Button type="submit" onClick={this.handleClose} color="primary">
-              Save changes
-            </Button>
+            <form>
+              <FormControlLabel
+                control={
+                  <Switch name="kind" onChange={this.handleChangeKind} />
+                }
+                label="Compañia"
+              />
+              <TextField label="Nombre" name="name" margin="normal" fullWidth />
+              <TextField label="Numero" name="number" margin="normal" />
+              {/*<TextField
+                label="Estado"
+                name="state"
+                margin="normal"
+                className="modalForm"
+              >
+              {estados.map(option => (
+                <option key={option} value={option}>
+                  {option.label}
+                </option>
+              ))}
+              </TextField>*/}
+              <TextField
+                label="Notario"
+                name="lawyer"
+                margin="normal"
+                fullWidth
+              />
+              <Button type="submit" onClick={this.handleClose} color="primary">
+                Save changes
+              </Button>
+            </form>
           </DialogContent>
         </Dialog>
       </div>
