@@ -36,7 +36,7 @@ class NavBar extends Component {
     const { user, open } = this.state;
     return (
       <div className="root">
-        <AppBar position="static" color="default">
+        <AppBar position="fixed" color="default">
           <Toolbar>
             {localStorage.getItem("token") ? (
               <div className="grow" align="left">

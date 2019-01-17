@@ -8,20 +8,28 @@ import {
   FormControlLabel,
   Switch,
   TextField,
-  Button
+  MenuItem,
+  Button,
+  Snackbar
 } from "@material-ui/core";
 import { Add } from "@material-ui/icons";
 
 import Template from "../Card/CardCompany";
-import { getCompanies } from "../../service";
+import { getCompanies, postCompany } from "../../service";
+import { States } from "../../helpers/states";
 
 class Company extends Component {
   constructor() {
     super();
     this.state = {
       companies: [],
-      company: {},
-      openModal: false
+      company: {
+        kind: "NOTARY",
+        state: ""
+      },
+      openModal: false,
+      openMessage: false,
+      message: ""
     };
   }
 
@@ -32,6 +40,7 @@ class Company extends Component {
   }
 
   handleClick = () => {
+    this.resetForm();
     this.setState({ openModal: true });
   };
 
@@ -56,8 +65,31 @@ class Company extends Component {
     this.setState({ company: company });
   };
 
+  handleSubmit = e => {
+    e.preventDefault();
+
+    postCompany(this.state.company).then(res => {
+      console.log(res);
+      this.setState({ message: res.msg, openMessage: true });
+      setTimeout(() => {
+        window.location.reload();
+      }, 2000);
+    });
+  };
+
+  resetForm = () => {
+    let { company } = this.state;
+
+    company.name = "";
+    company.kind = "NOTARY";
+    company.number = "";
+    company.state = "";
+    company.lawyer = "";
+    this.setState({ company: company });
+  };
+
   render() {
-    const { companies, openModal } = this.state;
+    const { companies, openModal, company, openMessage, message } = this.state;
     return (
       <div className="container">
         <Grid container spacing={24}>
@@ -76,39 +108,72 @@ class Company extends Component {
         <Dialog onClose={this.handleClose} open={openModal} scroll="body">
           <DialogTitle onClose={this.handleClose}>Nueva Compañia</DialogTitle>
           <DialogContent>
-            <form>
+            <form onSubmit={this.handleSubmit}>
               <FormControlLabel
                 control={
                   <Switch name="kind" onChange={this.handleChangeKind} />
                 }
                 label="Compañia"
               />
-              <TextField label="Nombre" name="name" margin="normal" fullWidth />
-              <TextField label="Numero" name="number" margin="normal" />
-              {/*<TextField
+              {company.kind === "COMPANY" ? (
+                <TextField
+                  label="Nombre de la Compañia"
+                  name="name"
+                  margin="normal"
+                  onChange={this.handleChange}
+                  fullWidth
+                />
+              ) : null}
+              {company.kind === "NOTARY" ? (
+                <TextField
+                  label="No. Notaria"
+                  name="number"
+                  type="number"
+                  margin="normal"
+                  onChange={this.handleChange}
+                  fullWidth
+                />
+              ) : null}
+              {company.kind === "NOTARY" ? (
+                <TextField
+                  label="Nombre del Notario"
+                  name="lawyer"
+                  margin="normal"
+                  onChange={this.handleChange}
+                  fullWidth
+                />
+              ) : null}
+              <TextField
+                select
                 label="Estado"
                 name="state"
                 margin="normal"
-                className="modalForm"
-              >
-              {estados.map(option => (
-                <option key={option} value={option}>
-                  {option.label}
-                </option>
-              ))}
-              </TextField>*/}
-              <TextField
-                label="Notario"
-                name="lawyer"
-                margin="normal"
+                value={company.state}
+                onChange={this.handleChange}
                 fullWidth
-              />
-              <Button type="submit" onClick={this.handleClose} color="primary">
-                Save changes
+              >
+                {States.map(option => (
+                  <MenuItem key={option.number} value={option.number}>
+                    {option.value}
+                  </MenuItem>
+                ))}
+              </TextField>
+              <Button
+                className="buttonForm"
+                type="submit"
+                onClick={this.handleClose}
+                color="primary"
+              >
+                Guardar
               </Button>
             </form>
           </DialogContent>
         </Dialog>
+        <Snackbar
+          onClose={this.handleClose}
+          open={openMessage}
+          message={message}
+        />
       </div>
     );
   }

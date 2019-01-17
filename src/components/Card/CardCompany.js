@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import {
   Grid,
   Card,
@@ -27,7 +28,12 @@ const CardCompany = ({ company }) => (
         <Typography color="textSecondary">{estados[company.state]}</Typography>
       </CardContent>
       <CardActions>
-        <Button color="secondary" size="small">
+        <Button
+          color="secondary"
+          component={Link}
+          size="small"
+          to={`/company/${company._id}`}
+        >
           Ver Mas
         </Button>
       </CardActions>

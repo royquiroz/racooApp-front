@@ -6,7 +6,7 @@ const base_url =
     : "https://spacio.herokuapp.com/api";
 
 const headers = {
-  "Content-Type": "multipart/form-data",
+  "Content-Type": "application/json",
   "x-access-token": localStorage.getItem("token")
 };
 
@@ -50,7 +50,6 @@ export const getCompanies = () => {
   return axios
     .get(`${base_url}/company`, { headers })
     .then(res => {
-      console.log(res);
       return {
         error: false,
         companies: res.data.companies,
@@ -69,11 +68,29 @@ export const getCompanyId = Id => {
   return axios
     .get(`${base_url}/company/${Id}`, { headers })
     .then(res => {
-      console.log(res);
       return {
         error: false,
         company: res.data.company,
         msg: "Compañia encontradas exitosamente"
+      };
+    })
+    .catch(err => {
+      return {
+        error: err.response.status,
+        msg: err.response.data.msg
+      };
+    });
+};
+
+export const postCompany = company => {
+  console.log(company);
+  return axios
+    .post(`${base_url}/company`, company, { headers })
+    .then(res => {
+      console.log(res);
+      return {
+        error: false,
+        msg: res.data.msg
       };
     })
     .catch(err => {

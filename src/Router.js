@@ -2,6 +2,7 @@ import React from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
 import Auth from "./components/Auth/Auth";
 import Company from "./components/Company/Company";
+import CompanyDetail from "./components/Company/CompanyDetail";
 import Home from "./components/Home";
 
 const Router = () => (
@@ -23,6 +24,17 @@ const Router = () => (
       render={props =>
         localStorage.getItem("token") ? (
           <Company {...props} />
+        ) : (
+          <Redirect to="/login" />
+        )
+      }
+    />
+    <Route
+      exact
+      path="/company/:id"
+      render={props =>
+        localStorage.getItem("token") ? (
+          <CompanyDetail {...props} />
         ) : (
           <Redirect to="/login" />
         )
