@@ -3,6 +3,7 @@ import { Switch, Route, Redirect } from "react-router-dom";
 import Auth from "./components/Auth/Auth";
 import Company from "./components/Company/Company";
 import CompanyDetail from "./components/Company/CompanyDetail";
+import Client from "./components/Client/Client";
 import Home from "./components/Home";
 
 const Router = () => (
@@ -13,6 +14,17 @@ const Router = () => (
       render={props =>
         localStorage.getItem("token") ? (
           <Home {...props} />
+        ) : (
+          <Redirect to="/login" />
+        )
+      }
+    />
+    <Route
+      exact
+      path="/clients"
+      render={props =>
+        localStorage.getItem("token") ? (
+          <Client {...props} />
         ) : (
           <Redirect to="/login" />
         )

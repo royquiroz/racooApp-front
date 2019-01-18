@@ -60,8 +60,6 @@ class Company extends Component {
 
     let field = e.target.name;
     company[field] = e.target.value;
-
-    console.log(company);
     this.setState({ company: company });
   };
 
@@ -163,6 +161,7 @@ class Company extends Component {
                 type="submit"
                 onClick={this.handleClose}
                 color="primary"
+                variant="contained"
               >
                 Guardar
               </Button>

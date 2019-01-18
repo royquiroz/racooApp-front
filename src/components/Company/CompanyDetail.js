@@ -13,6 +13,7 @@ import {
   PeopleTwoTone
 } from "@material-ui/icons";
 import User from "./ListUsers";
+import CompanyData from "./CompanyData";
 import { getCompanyId } from "../../service";
 
 class CompanyDetail extends Component {
@@ -40,7 +41,6 @@ class CompanyDetail extends Component {
 
   render() {
     const { company, value, loading } = this.state;
-    console.log(company);
     return (
       <div className="container">
         {loading ? (
@@ -58,13 +58,12 @@ class CompanyDetail extends Component {
                 Notaria No. {company.number}
               </Typography>
             ) : null}
-            <AppBar position="static" color="default" className="tabs">
+            <AppBar position="static" color="default" className="marginTabs">
               <Tabs
                 value={value}
                 onChange={this.handleChange}
-                indicatorColor="primary"
-                textColor="primary"
-                variant="fullWidth"
+                indicatorColor="secondary"
+                textColor="inherit"
                 centered
               >
                 <Tab icon={<AssignmentTwoTone />} label="Datos" />
@@ -72,7 +71,12 @@ class CompanyDetail extends Component {
                 <Tab icon={<PhoneTwoTone />} label="Llamadas" />
               </Tabs>
             </AppBar>
-            {value === 0 && <div>Item One</div>}
+
+            {value === 0 && (
+              <div>
+                <CompanyData company={company} />
+              </div>
+            )}
             {value === 1 && (
               <List component="nav">
                 {company.clients.map((user, i) => (

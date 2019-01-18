@@ -62,7 +62,7 @@ class ListMenu extends Component {
                 </ListItemIcon>
                 <ListItemText primary="Compañias" />
               </ListItem>
-              <ListItem button>
+              <ListItem component={NavLink} to="/clients">
                 <ListItemIcon>
                   <PersonTwoTone />
                 </ListItemIcon>

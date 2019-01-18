@@ -10,6 +10,7 @@ const headers = {
   "x-access-token": localStorage.getItem("token")
 };
 
+//Servicios de autorizacion
 export const register = auth => {
   return axios
     .post(`${base_url}/auth/register`, auth)
@@ -46,6 +47,7 @@ export const login = auth => {
     });
 };
 
+//Servicios de alta y consulta de compañias
 export const getCompanies = () => {
   return axios
     .get(`${base_url}/company`, { headers })
@@ -91,6 +93,25 @@ export const postCompany = company => {
       return {
         error: false,
         msg: res.data.msg
+      };
+    })
+    .catch(err => {
+      return {
+        error: err.response.status,
+        msg: err.response.data.msg
+      };
+    });
+};
+
+//Servicios de alta y consulta de clientes
+export const getClients = () => {
+  return axios
+    .get(`${base_url}/client`, { headers })
+    .then(res => {
+      return {
+        error: false,
+        clients: res.data.clients,
+        msg: `${res.data.clients.length} Clientes encontrados exitosamente`
       };
     })
     .catch(err => {
