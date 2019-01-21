@@ -4,12 +4,14 @@ import { Add } from "@material-ui/icons";
 import { getClients } from "../../service";
 
 import CardClient from "../Card/CardClient";
+import NewClient from "../Modal/NewClient";
 
 class Client extends Component {
   constructor() {
     super();
     this.state = {
-      clients: []
+      clients: [],
+      openModal: false
     };
   }
 
@@ -19,8 +21,16 @@ class Client extends Component {
     });
   }
 
+  handleClick = () => {
+    this.setState({ openModal: true });
+  };
+
+  handleClose = e => {
+    this.setState({ openModal: false });
+  };
+
   render() {
-    const { clients } = this.state;
+    const { clients, openModal } = this.state;
     console.log(clients);
 
     return (
@@ -29,15 +39,16 @@ class Client extends Component {
           {clients.map((client, i) => (
             <CardClient key={i} client={client} />
           ))}
+          <Fab
+            className="fab"
+            size="large"
+            color="primary"
+            onClick={this.handleClick}
+          >
+            <Add />
+          </Fab>
         </Grid>
-        <Fab
-          className="fab"
-          size="large"
-          color="primary"
-          onClick={this.handleClick}
-        >
-          <Add />
-        </Fab>
+        <NewClient openModal={openModal} handleClose={this.handleClose} />
       </div>
     );
   }
