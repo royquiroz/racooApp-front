@@ -8,7 +8,8 @@ import {
   MenuItem,
   Snackbar
 } from "@material-ui/core";
-import { getCompanies } from "../../service";
+//import Select from "react-select";
+import { getCompanies, postClient } from "../../service";
 
 class NewClient extends Component {
   constructor() {
@@ -44,12 +45,12 @@ class NewClient extends Component {
   handleSubmit = e => {
     e.preventDefault();
 
-    /*postCompany(this.state.client).then(res => {
+    postClient(this.state.client).then(res => {
       this.setState({ message: res.msg, openMessage: true });
       setTimeout(() => {
-        window.location.reload();
+        this.props.history.push(`/client/${res.client}`);
       }, 2000);
-    });*/
+    });
   };
 
   resetForm = () => {
@@ -66,6 +67,7 @@ class NewClient extends Component {
   render() {
     const { client, openMessage, message, companies } = this.state;
     const { openModal, handleClose } = this.props;
+
     return (
       <div>
         <Dialog onClose={handleClose} open={openModal} scroll="body">

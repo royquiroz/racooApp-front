@@ -4,6 +4,7 @@ import Auth from "./components/Auth/Auth";
 import Company from "./components/Company/Company";
 import CompanyDetail from "./components/Company/CompanyDetail";
 import Client from "./components/Client/Client";
+import ClientDetail from "./components/Client/ClientDetail";
 import Home from "./components/Home";
 
 const Router = () => (
@@ -25,6 +26,17 @@ const Router = () => (
       render={props =>
         localStorage.getItem("token") ? (
           <Client {...props} />
+        ) : (
+          <Redirect to="/login" />
+        )
+      }
+    />
+    <Route
+      exact
+      path="/client/:id"
+      render={props =>
+        localStorage.getItem("token") ? (
+          <ClientDetail {...props} />
         ) : (
           <Redirect to="/login" />
         )

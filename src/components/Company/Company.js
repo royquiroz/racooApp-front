@@ -47,7 +47,11 @@ class Company extends Component {
             <Add />
           </Fab>
         </Grid>
-        <NewCompany openModal={openModal} handleClose={this.handleClose} />
+        <NewCompany
+          openModal={openModal}
+          handleClose={this.handleClose}
+          {...this.props}
+        />
       </div>
     );
   }

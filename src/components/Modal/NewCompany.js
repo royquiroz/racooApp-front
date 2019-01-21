@@ -47,7 +47,7 @@ class NewCompany extends Component {
     postCompany(this.state.company).then(res => {
       this.setState({ message: res.msg, openMessage: true });
       setTimeout(() => {
-        window.location.reload();
+        this.props.history.push(`/company/${res.company}`);
       }, 2000);
     });
   };

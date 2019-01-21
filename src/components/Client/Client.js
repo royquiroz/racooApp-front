@@ -48,7 +48,11 @@ class Client extends Component {
             <Add />
           </Fab>
         </Grid>
-        <NewClient openModal={openModal} handleClose={this.handleClose} />
+        <NewClient
+          openModal={openModal}
+          handleClose={this.handleClose}
+          {...this.props}
+        />
       </div>
     );
   }

@@ -66,9 +66,9 @@ export const getCompanies = () => {
     });
 };
 
-export const getCompanyId = Id => {
+export const getCompanyId = id => {
   return axios
-    .get(`${base_url}/company/${Id}`, { headers })
+    .get(`${base_url}/company/${id}`, { headers })
     .then(res => {
       return {
         error: false,
@@ -92,6 +92,7 @@ export const postCompany = company => {
       console.log(res);
       return {
         error: false,
+        company: res.data.company._id,
         msg: res.data.msg
       };
     })
@@ -112,6 +113,42 @@ export const getClients = () => {
         error: false,
         clients: res.data.clients,
         msg: `${res.data.clients.length} Clientes encontrados exitosamente`
+      };
+    })
+    .catch(err => {
+      return {
+        error: err.response.status,
+        msg: err.response.data.msg
+      };
+    });
+};
+
+export const postClient = client => {
+  return axios
+    .post(`${base_url}/client`, client, { headers })
+    .then(res => {
+      return {
+        error: false,
+        client: res.data.client._id,
+        msg: res.data.msg
+      };
+    })
+    .catch(err => {
+      return {
+        error: err.response.status,
+        msg: err.response.data.msg
+      };
+    });
+};
+
+export const getClientId = id => {
+  return axios
+    .get(`${base_url}/client/${id}`, { headers })
+    .then(res => {
+      return {
+        error: false,
+        client: res.data.client,
+        msg: "Cliente encontrado exitosamente"
       };
     })
     .catch(err => {
