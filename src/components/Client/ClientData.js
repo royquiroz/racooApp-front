@@ -6,6 +6,7 @@ import {
   FormControl,
   InputLabel,
   Select,
+  Input,
   Chip,
   Button
 } from "@material-ui/core";
@@ -61,6 +62,7 @@ class ClientData extends Component {
               margin="normal"
               variant="outlined"
               value={client.company._id}
+              style={{ textAlign: "left" }}
               fullWidth
               disabled
             >
@@ -72,44 +74,33 @@ class ClientData extends Component {
                 </MenuItem>
               ))}
             </TextField>
-            <TextField
-              label="Puestos"
-              name="positions"
-              margin="normal"
-              variant="outlined"
-              value={client.positions}
-              fullWidth
-              disabled
-            />
 
-            {/*<FormControl>
-              <InputLabel htmlFor="select-multiple-chip">Chip</InputLabel>
+            <FormControl variant="outlined" fullWidth disabled>
+              <InputLabel htmlFor="select-multiple-chip">Puestos</InputLabel>
               <Select
                 multiple
-                value={personName}
+                value={client.positions}
                 input={<Input id="select-multiple-chip" />}
                 renderValue={selected => (
-                  <div>
+                  <div className="chipsPositions">
                     {selected.map(value => (
                       <Chip
                         key={value}
                         label={value}
+                        color="primary"
+                        style={{ margin: "0 2.5px" }}
                       />
                     ))}
                   </div>
                 )}
-                MenuProps={MenuProps}
               >
-                {names.map(name => (
-                  <MenuItem
-                    key={name}
-                    value={name}
-                  >
+                {Positions.Positions.map(name => (
+                  <MenuItem key={name} value={name}>
                     {name}
                   </MenuItem>
                 ))}
               </Select>
-                </FormControl>*/}
+            </FormControl>
 
             <TextField
               label="Extension"

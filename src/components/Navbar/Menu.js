@@ -68,7 +68,7 @@ class ListMenu extends Component {
                 </ListItemIcon>
                 <ListItemText primary="Usuarios" />
               </ListItem>
-              <ListItem button>
+              <ListItem component={NavLink} to="/calls">
                 <ListItemIcon>
                   <PhoneInTalkTwoTone />
                 </ListItemIcon>

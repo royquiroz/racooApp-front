@@ -5,6 +5,7 @@ import Company from "./components/Company/Company";
 import CompanyDetail from "./components/Company/CompanyDetail";
 import Client from "./components/Client/Client";
 import ClientDetail from "./components/Client/ClientDetail";
+import Call from "./components/Call/Call";
 import Home from "./components/Home";
 
 const Router = () => (
@@ -59,6 +60,17 @@ const Router = () => (
       render={props =>
         localStorage.getItem("token") ? (
           <CompanyDetail {...props} />
+        ) : (
+          <Redirect to="/login" />
+        )
+      }
+    />
+    <Route
+      exact
+      path="/calls"
+      render={props =>
+        localStorage.getItem("token") ? (
+          <Call {...props} />
         ) : (
           <Redirect to="/login" />
         )

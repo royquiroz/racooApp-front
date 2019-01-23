@@ -80,6 +80,7 @@ class CompanyData extends Component {
               margin="normal"
               variant="outlined"
               value={company.state}
+              style={{ textAlign: "left" }}
               fullWidth
               disabled
             >

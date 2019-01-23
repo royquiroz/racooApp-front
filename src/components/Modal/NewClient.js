@@ -71,7 +71,7 @@ class NewClient extends Component {
     return (
       <div>
         <Dialog onClose={handleClose} open={openModal} scroll="body">
-          <DialogTitle onClose={handleClose}>Nueva Compañia</DialogTitle>
+          <DialogTitle onClose={handleClose}>Nueva Cliente</DialogTitle>
           <DialogContent>
             <form onSubmit={this.handleSubmit}>
               <TextField

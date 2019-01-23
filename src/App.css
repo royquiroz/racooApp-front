@@ -83,3 +83,8 @@
 .marginTabs {
   margin: 1% 0 0.5% 0;
 }
+
+.chipsPositions {
+  display: flex;
+  flex-wrap: wrap;
+}

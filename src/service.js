@@ -158,3 +158,22 @@ export const getClientId = id => {
       };
     });
 };
+
+//Servicios de alta y consulta de clientes
+export const getCalls = () => {
+  return axios
+    .get(`${base_url}/call`, { headers })
+    .then(res => {
+      return {
+        error: false,
+        calls: res.data.calls,
+        msg: `${res.data.calls.length} LLamadas encontradas exitosamente`
+      };
+    })
+    .catch(err => {
+      return {
+        error: err.response.status,
+        msg: err.response.data.msg
+      };
+    });
+};
