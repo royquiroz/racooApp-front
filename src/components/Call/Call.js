@@ -1,10 +1,10 @@
 import React, { Component } from "react";
-import { Grid, Fab } from "@material-ui/core";
+import { Grid, Paper, Fab } from "@material-ui/core";
 import { Add } from "@material-ui/icons";
 
-//import Template from "../Card/CardCompany";
+import TableCalls from "../Tables/TableCalls";
+import NewCall from "../Modal/NewCall";
 import { getCalls } from "../../service";
-//import NewCompany from "../Modal/NewCompany";
 
 class Call extends Component {
   constructor() {
@@ -36,9 +36,9 @@ class Call extends Component {
     return (
       <div className="container">
         <Grid container spacing={24}>
-          {calls.map(call => (
-            <h6>{call.kind}</h6>
-          ))}
+          <Paper style={{ width: "100%" }}>
+            <TableCalls calls={calls} />
+          </Paper>
           <Fab
             className="fab"
             size="large"
@@ -48,11 +48,11 @@ class Call extends Component {
             <Add />
           </Fab>
         </Grid>
-        {/*<NewCompany
+        <NewCall
           openModal={openModal}
           handleClose={this.handleClose}
           {...this.props}
-        />*/}
+        />
       </div>
     );
   }
