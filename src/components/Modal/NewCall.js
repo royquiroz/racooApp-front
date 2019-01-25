@@ -4,6 +4,10 @@ import {
   DialogTitle,
   DialogContent,
   TextField,
+  FormLabel,
+  RadioGroup,
+  Radio,
+  FormControlLabel,
   Button,
   MenuItem,
   Snackbar
@@ -18,8 +22,9 @@ class NewCall extends Component {
       call: {
         company: "",
         client: "",
-        name: "",
-        last_name: ""
+        kind: "",
+        system: "",
+        problem: ""
       },
       openMessage: false,
       message: "",
@@ -30,7 +35,6 @@ class NewCall extends Component {
 
   componentWillMount() {
     getCompanies().then(res => {
-      console.log(res);
       this.setState({ companies: res.companies });
     });
   }
@@ -42,6 +46,8 @@ class NewCall extends Component {
     call[field] = e.target.value;
 
     this.handleChangeList();
+
+    console.log(call);
 
     this.setState({ call: call });
   };
@@ -74,8 +80,9 @@ class NewCall extends Component {
     call = {
       company: "",
       client: "",
-      name: "",
-      last_name: ""
+      kind: "",
+      system: "",
+      problem: ""
     };
     this.setState({ call: call });
   };
@@ -124,20 +131,88 @@ class NewCall extends Component {
                   ))}
                 </TextField>
               ) : null}
-              <TextField
-                label="Nombre"
-                name="name"
-                margin="normal"
-                onChange={this.handleChange}
-                fullWidth
-              />
-              <TextField
-                label="Apellido"
-                name="last_name"
-                margin="normal"
-                onChange={this.handleChange}
-                fullWidth
-              />
+
+              {call.client !== "" ? (
+                <div>
+                  <FormLabel component="legend" className="labelsRadios">
+                    Tipo de Soporte
+                  </FormLabel>
+                  <RadioGroup
+                    aria-label="kind"
+                    name="kind"
+                    onChange={this.handleChange}
+                    row={true}
+                  >
+                    <FormControlLabel
+                      value="CALL"
+                      control={<Radio />}
+                      label="Llamada"
+                    />
+                    <FormControlLabel
+                      value="SOS"
+                      control={<Radio />}
+                      label="SOS"
+                    />
+                    <FormControlLabel
+                      value="REVERSE"
+                      control={<Radio />}
+                      label="Inverso"
+                    />
+                  </RadioGroup>
+
+                  <FormLabel component="legend" className="labelsRadios">
+                    Sistema
+                  </FormLabel>
+                  <RadioGroup
+                    aria-label="system"
+                    name="system"
+                    onChange={this.handleChange}
+                    row={true}
+                  >
+                    <FormControlLabel
+                      value="MINOTARIA"
+                      control={<Radio />}
+                      label="MiNotaria"
+                    />
+                    <FormControlLabel
+                      value="CALCULOFACIL"
+                      control={<Radio />}
+                      label="CalculoFacil"
+                    />
+                    <FormControlLabel
+                      value="LISTASPB"
+                      control={<Radio />}
+                      label="ListasPB"
+                    />
+                    <FormControlLabel
+                      value="CFDI"
+                      control={<Radio />}
+                      label="CFDI"
+                    />
+                    <FormControlLabel
+                      value="UIF"
+                      control={<Radio />}
+                      label="UIF"
+                    />
+                    <FormControlLabel
+                      value="RACOO NOTARIOS"
+                      control={<Radio />}
+                      label="Racoo Notarios"
+                    />
+                  </RadioGroup>
+
+                  <TextField
+                    multiline
+                    rows="4"
+                    label="Problema"
+                    name="problem"
+                    margin="normal"
+                    onChange={this.handleChange}
+                    fullWidth
+                  />
+                </div>
+              ) : null}
+
               <Button
                 className="buttonForm"
                 type="submit"
