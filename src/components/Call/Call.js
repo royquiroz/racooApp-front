@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Grid, Paper, Fab } from "@material-ui/core";
+import { Grid, Paper, Fab, CircularProgress } from "@material-ui/core";
 import { Add } from "@material-ui/icons";
 
 import TableCalls from "../Tables/TableCalls";
@@ -11,14 +11,17 @@ class Call extends Component {
     super();
     this.state = {
       calls: [],
-      openModal: false
+      openModal: false,
+      loading: true
     };
   }
 
   componentWillMount() {
     getCalls().then(res => {
       console.log(res);
-      this.setState({ calls: res.calls });
+      setTimeout(() => {
+        this.setState({ calls: res.calls, loading: false });
+      }, 3000);
     });
   }
 
@@ -31,23 +34,27 @@ class Call extends Component {
   };
 
   render() {
-    const { calls, openModal } = this.state;
+    const { calls, openModal, loading } = this.state;
 
     return (
       <div className="container">
-        <Grid container spacing={24}>
-          <Paper style={{ width: "100%" }}>
-            <TableCalls calls={calls} />
-          </Paper>
-          <Fab
-            className="fab"
-            size="large"
-            color="primary"
-            onClick={this.handleClick}
-          >
-            <Add />
-          </Fab>
-        </Grid>
+        {loading ? (
+          <CircularProgress />
+        ) : (
+          <Grid container spacing={24}>
+            <Paper style={{ width: "100%" }}>
+              <TableCalls calls={calls} {...this.props} />
+            </Paper>
+            <Fab
+              className="fab"
+              size="large"
+              color="primary"
+              onClick={this.handleClick}
+            >
+              <Add />
+            </Fab>
+          </Grid>
+        )}
         <NewCall
           openModal={openModal}
           handleClose={this.handleClose}

@@ -14,7 +14,7 @@ const User = ({ user }) => (
   <Grid spacing={32} container>
     <Grid item sm={4} xs={false} />
     <Grid item sm={4} xs={12}>
-      <ListItem component={Link} to={`/user/${user._id}`} button>
+      <ListItem component={Link} to={`/client/${user._id}`} button>
         <ListItemIcon>
           <Person />
         </ListItemIcon>

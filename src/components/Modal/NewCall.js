@@ -13,7 +13,7 @@ import {
   Snackbar
 } from "@material-ui/core";
 //import Select from "react-select";
-import { getCompanies, postClient } from "../../service";
+import { getCompanies, postCall } from "../../service";
 
 class NewCall extends Component {
   constructor() {
@@ -45,9 +45,9 @@ class NewCall extends Component {
     let field = e.target.name;
     call[field] = e.target.value;
 
-    this.handleChangeList();
+    call.user = JSON.parse(localStorage.getItem("user"))._id;
 
-    console.log(call);
+    this.handleChangeList();
 
     this.setState({ call: call });
   };
@@ -63,16 +63,16 @@ class NewCall extends Component {
     this.setState({ listClients: list[0].clients });
   };
 
-  /*handleSubmit = e => {
+  handleSubmit = e => {
     e.preventDefault();
 
-    postClient(this.state.client).then(res => {
+    postCall(this.state.call).then(res => {
       this.setState({ message: res.msg, openMessage: true });
-      setTimeout(() => {
+      /*setTimeout(() => {
         this.props.history.push(`/client/${res.client}`);
-      }, 2000);
+      }, 2000);*/
     });
-  };*/
+  };
 
   resetForm = () => {
     let { call } = this.state;
@@ -132,7 +132,7 @@ class NewCall extends Component {
                 </TextField>
               ) : null}
 
-              {call.client !== "" ? (
+              {call.client !== "" && listClients.length > 0 ? (
                 <div>
                   <FormLabel component="legend" className="labelsRadios">
                     Tipo de Soporte

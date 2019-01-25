@@ -3,7 +3,7 @@ import axios from "axios";
 const base_url =
   window.location.hostname === "localhost"
     ? "http://localhost:3000/api"
-    : "https://spacio.herokuapp.com/api";
+    : "https://racooapp.herokuapp.com/api";
 
 const headers = {
   "Content-Type": "application/json",
@@ -168,6 +168,28 @@ export const getCalls = () => {
         error: false,
         calls: res.data.calls,
         msg: `${res.data.calls.length} LLamadas encontradas exitosamente`
+      };
+    })
+    .catch(err => {
+      return {
+        error: err.response.status,
+        msg: err.response.data.msg
+      };
+    });
+};
+
+export const postCall = call => {
+  console.log(call);
+
+  return axios
+    .post(`${base_url}/call`, call, { headers })
+    .then(res => {
+      console.log(res);
+
+      return {
+        error: false,
+        call: res.data.call._id,
+        msg: res.data.msg
       };
     })
     .catch(err => {
