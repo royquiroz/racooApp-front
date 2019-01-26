@@ -6,8 +6,8 @@ import CompanyDetail from "./components/Company/CompanyDetail";
 import Client from "./components/Client/Client";
 import ClientDetail from "./components/Client/ClientDetail";
 import Call from "./components/Call/Call";
-import Home from "./components/Home";
 import CallDetail from "./components/Call/CallDetail";
+import Home from "./components/Home";
 
 const Router = () => (
   <Switch>
@@ -95,7 +95,7 @@ const Router = () => (
         !localStorage.getItem("token") ? (
           <Auth {...props} auth="login" />
         ) : (
-          <Redirect to="/" />
+          <Redirect to="/companies" />
         )
       }
     />
@@ -106,7 +106,7 @@ const Router = () => (
         !localStorage.getItem("token") ? (
           <Auth {...props} auth="signup" />
         ) : (
-          <Redirect to="/" />
+          <Redirect to="/companies" />
         )
       }
     />

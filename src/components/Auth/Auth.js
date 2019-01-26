@@ -57,6 +57,7 @@ class Auth extends Component {
 
   render() {
     const { open, message } = this.state;
+
     return (
       <div className="container">
         <Grid container spacing={24}>
