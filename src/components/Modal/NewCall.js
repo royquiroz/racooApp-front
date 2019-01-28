@@ -68,9 +68,9 @@ class NewCall extends Component {
 
     postCall(this.state.call).then(res => {
       this.setState({ message: res.msg, openMessage: true });
-      /*setTimeout(() => {
-        this.props.history.push(`/client/${res.client}`);
-      }, 2000);*/
+      setTimeout(() => {
+        this.props.history.push(`/call/${res.call}`);
+      }, 2000);
     });
   };
 

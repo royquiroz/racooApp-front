@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Grid, Paper, Fab, CircularProgress } from "@material-ui/core";
 import { Add } from "@material-ui/icons";
+import moment from "moment";
 
 import TableCalls from "../Tables/TableCalls";
 import NewCall from "../Modal/NewCall";
@@ -12,15 +13,22 @@ class Call extends Component {
     this.state = {
       calls: [],
       openModal: false,
-      loading: true
+      loading: true,
+      filtered: []
     };
   }
 
   componentWillMount() {
     getCalls().then(res => {
-      console.log(res);
+      let now = moment().format("l");
+
+      this.rangeDates(now, now, res.calls);
+
       setTimeout(() => {
-        this.setState({ calls: res.calls, loading: false });
+        this.setState({
+          calls: res.calls,
+          loading: false
+        });
       }, 3000);
     });
   }
@@ -33,8 +41,17 @@ class Call extends Component {
     this.setState({ openModal: false });
   };
 
+  rangeDates = (dateInit, dateFin, calls) => {
+    let filtered = calls.filter(
+      call =>
+        moment(call.created_at).format("l") >= dateInit &&
+        moment(call.created_at).format("l") <= dateFin
+    );
+    this.setState({ filtered: filtered });
+  };
+
   render() {
-    const { calls, openModal, loading } = this.state;
+    const { filtered, openModal, loading } = this.state;
 
     return (
       <div className="container">
@@ -43,7 +60,7 @@ class Call extends Component {
         ) : (
           <Grid container spacing={24}>
             <Paper style={{ width: "100%" }}>
-              <TableCalls calls={calls} {...this.props} />
+              <TableCalls calls={filtered} {...this.props} />
             </Paper>
             <Fab
               className="fab"

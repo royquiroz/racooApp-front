@@ -6,6 +6,7 @@ import {
   TableRow,
   TableCell
 } from "@material-ui/core";
+import moment from "moment";
 
 class TableCalls extends Component {
   constructor() {
@@ -30,6 +31,7 @@ class TableCalls extends Component {
             <TableCell>Clasificacion</TableCell>
             <TableCell>Estatus</TableCell>
             <TableCell>Resultado</TableCell>
+            <TableCell>Fecha</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -51,6 +53,7 @@ class TableCalls extends Component {
               <TableCell>{call.classification}</TableCell>
               <TableCell>{call.status}</TableCell>
               <TableCell>{call.ending}</TableCell>
+              <TableCell>{moment(call.created_at).format("lll")}</TableCell>
             </TableRow>
           ))}
         </TableBody>

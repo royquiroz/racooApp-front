@@ -9,6 +9,7 @@ import {
 import { AssignmentTwoTone, PhoneTwoTone } from "@material-ui/icons";
 import { getClientId } from "../../service";
 import ClientData from "./ClientData";
+import ClientCalls from "./ClientCalls";
 
 class ClientDetail extends Component {
   constructor() {
@@ -62,7 +63,7 @@ class ClientDetail extends Component {
                 <ClientData client={client} />
               </div>
             )}
-            {value === 1 && <div>Item Three</div>}
+            {value === 1 && <ClientCalls />}
           </div>
         )}
       </div>
