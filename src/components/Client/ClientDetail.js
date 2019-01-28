@@ -63,7 +63,11 @@ class ClientDetail extends Component {
                 <ClientData client={client} />
               </div>
             )}
-            {value === 1 && <ClientCalls />}
+            {value === 1 && (
+              <div>
+                <ClientCalls client={client} {...this.props} />
+              </div>
+            )}
           </div>
         )}
       </div>

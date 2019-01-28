@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Grid, Paper, Fab, CircularProgress } from "@material-ui/core";
 import { Add } from "@material-ui/icons";
+import { InlineDatePicker } from "material-ui-pickers";
 import moment from "moment";
 
 import TableCalls from "../Tables/TableCalls";
@@ -12,21 +13,27 @@ class Call extends Component {
     super();
     this.state = {
       calls: [],
+      filtered: [],
+      dates: {
+        init: "",
+        fin: ""
+      },
       openModal: false,
       loading: true,
-      filtered: []
+      fromCalls: true
     };
   }
 
   componentWillMount() {
     getCalls().then(res => {
+      let calls = res.calls.reverse();
       let now = moment().format("l");
 
-      this.rangeDates(now, now, res.calls);
+      this.rangeDates(now, now, calls);
 
       setTimeout(() => {
         this.setState({
-          calls: res.calls,
+          calls: calls,
           loading: false
         });
       }, 3000);
@@ -50,8 +57,12 @@ class Call extends Component {
     this.setState({ filtered: filtered });
   };
 
+  handleChangeDate = e => {
+    console.log(e.target.value);
+  };
+
   render() {
-    const { filtered, openModal, loading } = this.state;
+    const { filtered, openModal, loading, fromCalls } = this.state;
 
     return (
       <div className="container">
@@ -59,8 +70,34 @@ class Call extends Component {
           <CircularProgress />
         ) : (
           <Grid container spacing={24}>
+            {/*<Grid item sm={3} />
+            <Grid item sm={6}>
+              <InlineDatePicker
+                keyboard
+                variant="outlined"
+                label="Fecha Inicial"
+                value={moment()}
+                format="DD/MM/YYYY"
+                style={{ margin: "0 1%" }}
+                onChange={this.handleChangeDate}
+              />
+              <InlineDatePicker
+                keyboard
+                variant="outlined"
+                label="Fecha Final"
+                value={moment()}
+                format="DD/MM/YYYY"
+                style={{ margin: "0 1%" }}
+                onChange={this.handleChangeDate}
+              />
+            </Grid>
+        <Grid item sm={3} />*/}
             <Paper style={{ width: "100%" }}>
-              <TableCalls calls={filtered} {...this.props} />
+              <TableCalls
+                calls={filtered}
+                fromCalls={fromCalls}
+                {...this.props}
+              />
             </Paper>
             <Fab
               className="fab"

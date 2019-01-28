@@ -19,12 +19,12 @@ class TableCalls extends Component {
   };
 
   render() {
-    const { calls } = this.props;
+    const { calls, fromCalls } = this.props;
     return (
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell>Cliente</TableCell>
+            {fromCalls ? <TableCell>Cliente</TableCell> : null}
             <TableCell>Tipo de Soporte</TableCell>
             <TableCell>Sistema</TableCell>
             <TableCell>Consultor</TableCell>
@@ -42,9 +42,11 @@ class TableCalls extends Component {
               hover
               onClick={() => this.goToCall(call._id)}
             >
-              <TableCell>
-                {call.client.name} {call.client.last_name}
-              </TableCell>
+              {fromCalls ? (
+                <TableCell>
+                  {call.client.name} {call.client.last_name}
+                </TableCell>
+              ) : null}
               <TableCell>{call.kind}</TableCell>
               <TableCell>{call.system}</TableCell>
               <TableCell>

@@ -3,22 +3,23 @@ import { Grid, Paper, Typography } from "@material-ui/core";
 
 import TableCalls from "../Tables/TableCalls";
 
-class ClientCalls extends Component {
+class CompanyCalls extends Component {
   constructor() {
     super();
     this.state = {
       calls: [],
-      fromCalls: false
+      fromCalls: true
     };
   }
 
   componentWillMount() {
-    const { client } = this.props;
-    this.setState({ calls: client.calls });
+    const { company } = this.props;
+    this.setState({ calls: company.calls });
   }
 
   render() {
     const { calls, fromCalls } = this.state;
+    console.log(this.props);
 
     return (
       <Grid container spacing={24}>
@@ -36,4 +37,4 @@ class ClientCalls extends Component {
   }
 }
 
-export default ClientCalls;
+export default CompanyCalls;

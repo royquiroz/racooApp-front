@@ -14,6 +14,7 @@ import {
 } from "@material-ui/icons";
 import User from "./ListUsers";
 import CompanyData from "./CompanyData";
+import CompanyCalls from "./CompanyCalls";
 import { getCompanyId } from "../../service";
 
 class CompanyDetail extends Component {
@@ -84,7 +85,11 @@ class CompanyDetail extends Component {
                 ))}
               </List>
             )}
-            {value === 2 && <div>Item Three</div>}
+            {value === 2 && (
+              <div>
+                <CompanyCalls company={company} {...this.props} />
+              </div>
+            )}
           </div>
         )}
       </div>
