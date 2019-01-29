@@ -40,8 +40,12 @@ class NavBar extends Component {
           <Toolbar>
             {localStorage.getItem("token") ? (
               <div className="grow" align="left">
-                <IconButton color="inherit" aria-label="Menu">
-                  <Menu onClick={this.toggleDrawer} />
+                <IconButton
+                  color="inherit"
+                  aria-label="Menu"
+                  onClick={this.toggleDrawer}
+                >
+                  <Menu />
                 </IconButton>
               </div>
             ) : (

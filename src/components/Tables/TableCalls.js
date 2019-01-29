@@ -58,6 +58,12 @@ class TableCalls extends Component {
               <TableCell>{moment(call.created_at).format("lll")}</TableCell>
             </TableRow>
           ))}
+          <TableRow>
+            <TableCell align="right" colSpan={fromCalls ? 6 : 5}>
+              Total de llamadas
+            </TableCell>
+            <TableCell align="center">{calls.length}</TableCell>
+          </TableRow>
         </TableBody>
         {/*<TableFooter>
       <TableRow>
