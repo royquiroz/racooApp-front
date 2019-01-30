@@ -199,3 +199,21 @@ export const postCall = call => {
       };
     });
 };
+
+export const getCallId = id => {
+  return axios
+    .get(`${base_url}/call/${id}`, { headers })
+    .then(res => {
+      return {
+        error: false,
+        call: res.data.call,
+        msg: "Llamada encontrada exitosamente"
+      };
+    })
+    .catch(err => {
+      return {
+        error: err.response.status,
+        msg: err.response.data.msg
+      };
+    });
+};
