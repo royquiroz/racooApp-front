@@ -34,8 +34,15 @@ class NewCall extends Component {
   }
 
   componentWillMount() {
+    let { call } = this.state;
+    if (this.props.client) {
+      call.company = this.props.client.company._id;
+      call.client = this.props.client._id;
+    }
+    console.log(call);
+
     getCompanies().then(res => {
-      this.setState({ companies: res.companies });
+      this.setState({ companies: res.companies, call: call });
     });
   }
 
@@ -114,7 +121,8 @@ class NewCall extends Component {
                   </MenuItem>
                 ))}
               </TextField>
-              {call.company !== "" && listClients.length > 0 ? (
+              {(call.company !== "" && listClients.length > 0) ||
+              call.client !== "" ? (
                 <TextField
                   select
                   label="Cliente"

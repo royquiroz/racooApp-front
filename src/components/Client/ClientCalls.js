@@ -1,14 +1,17 @@
 import React, { Component } from "react";
-import { Grid, Paper, Typography } from "@material-ui/core";
+import { Grid, Paper, Typography, Fab } from "@material-ui/core";
+import { Add } from "@material-ui/icons";
 
 import TableCalls from "../Tables/TableCalls";
+import NewCall from "../Modal/NewCall";
 
 class ClientCalls extends Component {
   constructor() {
     super();
     this.state = {
       calls: [],
-      fromCalls: false
+      fromCalls: false,
+      openModal: false
     };
   }
 
@@ -17,21 +20,45 @@ class ClientCalls extends Component {
     this.setState({ calls: client.calls });
   }
 
+  handleClick = () => {
+    this.setState({ openModal: true });
+  };
+
+  handleClose = e => {
+    this.setState({ openModal: false });
+  };
+
   render() {
-    const { calls, fromCalls } = this.state;
+    const { calls, fromCalls, openModal } = this.state;
 
     return (
-      <Grid container spacing={24}>
-        {calls.length <= 0 ? (
-          <Typography align="center" variant="h4" style={{ width: "100%" }}>
-            Sin llamadas
-          </Typography>
-        ) : (
-          <Paper style={{ width: "100%" }}>
-            <TableCalls calls={calls} fromCalls={fromCalls} {...this.props} />
-          </Paper>
-        )}
-      </Grid>
+      <div>
+        <Grid container spacing={24}>
+          {calls.length <= 0 ? (
+            <Typography align="center" variant="h4" style={{ width: "100%" }}>
+              Sin llamadas
+            </Typography>
+          ) : (
+            <Paper style={{ width: "100%" }}>
+              <TableCalls calls={calls} fromCalls={fromCalls} {...this.props} />
+            </Paper>
+          )}
+          <Fab
+            className="fab"
+            size="large"
+            color="primary"
+            onClick={this.handleClick}
+          >
+            <Add />
+          </Fab>
+        </Grid>
+        <NewCall
+          client={this.props.client}
+          openModal={openModal}
+          handleClose={this.handleClose}
+          {...this.props}
+        />
+      </div>
     );
   }
 }

@@ -16,7 +16,7 @@ class ClientDetail extends Component {
     super();
     this.state = {
       client: [],
-      value: 0,
+      value: 1,
       loading: true
     };
   }
@@ -36,6 +36,8 @@ class ClientDetail extends Component {
 
   render() {
     const { client, value, loading } = this.state;
+    console.log(client);
+
     return (
       <div className="container">
         {loading ? (

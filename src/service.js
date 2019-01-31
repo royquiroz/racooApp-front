@@ -217,3 +217,21 @@ export const getCallId = id => {
       };
     });
 };
+
+export const patchCallId = (id, call) => {
+  return axios
+    .patch(`${base_url}/call/${id}`, call, { headers })
+    .then(res => {
+      return {
+        error: false,
+        call: res.data.call,
+        msg: "Llamada editada exitosamente"
+      };
+    })
+    .catch(err => {
+      return {
+        error: err.response.status,
+        msg: err.response.data.msg
+      };
+    });
+};
