@@ -104,6 +104,26 @@ export const postCompany = company => {
     });
 };
 
+export const patchCompany = (id, company) => {
+  console.log(company);
+  return axios
+    .patch(`${base_url}/company/${id}`, company, { headers })
+    .then(res => {
+      console.log(res);
+      return {
+        error: false,
+        company: res.data.company,
+        msg: res.data.msg
+      };
+    })
+    .catch(err => {
+      return {
+        error: err.response.status,
+        msg: err.response.data.msg
+      };
+    });
+};
+
 //Servicios de alta y consulta de clientes
 export const getClients = () => {
   return axios
@@ -149,6 +169,26 @@ export const getClientId = id => {
         error: false,
         client: res.data.client,
         msg: "Cliente encontrado exitosamente"
+      };
+    })
+    .catch(err => {
+      return {
+        error: err.response.status,
+        msg: err.response.data.msg
+      };
+    });
+};
+
+export const patchClient = (id, client) => {
+  console.log(client);
+  return axios
+    .patch(`${base_url}/client/${id}`, client, { headers })
+    .then(res => {
+      console.log(res);
+      return {
+        error: false,
+        client: res.data.client,
+        msg: res.data.msg
       };
     })
     .catch(err => {

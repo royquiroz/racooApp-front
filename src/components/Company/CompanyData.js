@@ -5,15 +5,20 @@ import {
   Switch,
   TextField,
   MenuItem,
-  Button
+  Button,
+  Snackbar
 } from "@material-ui/core";
 import { States } from "../../helpers/states";
+import { patchCompany } from "../../service";
 
 class CompanyData extends Component {
   constructor() {
     super();
     this.state = {
-      kind: "NOTARY"
+      company: {},
+      kind: "NOTARY",
+      message: "",
+      openMessage: false
     };
   }
 
@@ -24,20 +29,40 @@ class CompanyData extends Component {
     this.setState({ company: company });
   };
 
+  handleChange = e => {
+    const { company } = this.state;
+
+    let field = e.target.name;
+    company[field] = e.target.value;
+    console.log(company);
+
+    this.setState({ company: company });
+  };
+
+  handleSubmit = e => {
+    e.preventDefault();
+    const { company } = this.state;
+
+    patchCompany(this.props.company._id, company).then(res => {
+      this.setState({ message: res.msg, openMessage: true });
+    });
+  };
+
   render() {
     const { company } = this.props;
+    const { message, openMessage } = this.state;
+
     return (
       <Grid spacing={32} container>
         <Grid item sm={4} xs={false} />
         <Grid item sm={4} xs={12}>
-          <form>
+          <form onSubmit={this.handleSubmit}>
             <FormControlLabel
               control={
                 <Switch
                   name="kind"
                   checked={company.kind === "COMPANY" ? true : false}
                   onChange={this.handleChangeKind}
-                  disabled
                 />
               }
               label="Compañia"
@@ -45,44 +70,52 @@ class CompanyData extends Component {
             {company.kind === "COMPANY" ? (
               <TextField
                 label="Nombre de la Compañia"
+                name="name"
                 margin="normal"
-                variant="outlined"
-                value={company.name}
+                defaultValue={company.name}
                 fullWidth
-                disabled
+                onChange={this.handleChange}
               />
             ) : null}
             {company.kind === "NOTARY" ? (
               <TextField
                 label="Nombre del Notario"
+                name="lawyer"
                 margin="normal"
-                variant="outlined"
-                value={company.lawyer}
+                defaultValue={company.lawyer}
                 fullWidth
-                disabled
+                onChange={this.handleChange}
               />
             ) : null}
             {company.kind === "NOTARY" ? (
               <TextField
                 label="Numero de Notaria"
+                name="number"
                 type="number"
                 margin="normal"
-                variant="outlined"
-                value={company.number}
+                defaultValue={company.number}
                 fullWidth
-                disabled
+                onChange={this.handleChange}
               />
             ) : null}
+            <TextField
+              label="Telefono"
+              name="telephone"
+              margin="normal"
+              type="number"
+              defaultValue={company.telephone}
+              fullWidth
+              onChange={this.handleChange}
+            />
             <TextField
               select
               label="Estado"
               name="state"
               margin="normal"
-              variant="outlined"
               value={company.state}
               style={{ textAlign: "left" }}
               fullWidth
-              disabled
+              onChange={this.handleChange}
             >
               {States.map(option => (
                 <MenuItem key={option.number} value={option.number}>
@@ -90,12 +123,13 @@ class CompanyData extends Component {
                 </MenuItem>
               ))}
             </TextField>
-            <Button variant="contained" color="primary" type="submit" disabled>
+            <Button variant="contained" color="primary" type="submit">
               Guardar
             </Button>
           </form>
         </Grid>
         <Grid item sm={4} xs={false} />
+        <Snackbar open={openMessage} message={message} />
       </Grid>
     );
   }
