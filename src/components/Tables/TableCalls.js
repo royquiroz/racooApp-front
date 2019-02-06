@@ -49,9 +49,13 @@ class TableCalls extends Component {
               ) : null}
               <TableCell>{call.kind}</TableCell>
               <TableCell>{call.system}</TableCell>
-              <TableCell>
-                {call.user.name} {call.user.last_name}
-              </TableCell>
+              {call.prev_db ? (
+                <TableCell>{call.prev_db_user}</TableCell>
+              ) : (
+                <TableCell>
+                  {call.user.name} {call.user.last_name}
+                </TableCell>
+              )}
               <TableCell>{call.classification}</TableCell>
               <TableCell>{call.status}</TableCell>
               <TableCell>{call.ending}</TableCell>
