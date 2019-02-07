@@ -3,11 +3,13 @@ import {
   AppBar,
   Tabs,
   Tab,
+  Fab,
   Typography,
   CircularProgress,
   List
 } from "@material-ui/core";
 import {
+  Add,
   AssignmentTwoTone,
   PhoneTwoTone,
   PeopleTwoTone
@@ -16,14 +18,16 @@ import User from "./ListUsers";
 import CompanyData from "./CompanyData";
 import CompanyCalls from "./CompanyCalls";
 import { getCompanyId } from "../../service";
+import NewClient from "../Modal/NewClient";
 
 class CompanyDetail extends Component {
   constructor() {
     super();
     this.state = {
       company: [],
-      value: 0,
-      loading: true
+      value: 1,
+      loading: true,
+      openModal: false
     };
   }
 
@@ -36,12 +40,20 @@ class CompanyDetail extends Component {
     });
   }
 
+  handleClick = () => {
+    this.setState({ openModal: true });
+  };
+
+  handleClose = e => {
+    this.setState({ openModal: false });
+  };
+
   handleChange = (e, value) => {
     this.setState({ value: value });
   };
 
   render() {
-    const { company, value, loading } = this.state;
+    const { company, value, loading, openModal } = this.state;
     return (
       <div className="container">
         {loading ? (
@@ -90,6 +102,21 @@ class CompanyDetail extends Component {
                 <CompanyCalls company={company} {...this.props} />
               </div>
             )}
+
+            <Fab
+              className="fab"
+              size="large"
+              color="primary"
+              onClick={this.handleClick}
+            >
+              <Add />
+            </Fab>
+            <NewClient
+              openModal={openModal}
+              handleClose={this.handleClose}
+              company={company}
+              {...this.props}
+            />
           </div>
         )}
       </div>

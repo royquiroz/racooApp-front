@@ -39,7 +39,6 @@ class NewCall extends Component {
       call.company = this.props.client.company._id;
       call.client = this.props.client._id;
     }
-    console.log(call);
 
     getCompanies().then(res => {
       this.setState({ companies: res.companies, call: call });

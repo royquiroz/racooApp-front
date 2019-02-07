@@ -48,9 +48,9 @@ export const login = auth => {
 };
 
 //Servicios de alta y consulta de compañias
-export const getCompanies = () => {
+export const getCompanies = (name, checked) => {
   return axios
-    .get(`${base_url}/company`, { headers })
+    .get(`${base_url}/company?name=${name}&checked=${checked}`, { headers })
     .then(res => {
       return {
         error: false,
@@ -125,9 +125,9 @@ export const patchCompany = (id, company) => {
 };
 
 //Servicios de alta y consulta de clientes
-export const getClients = () => {
+export const getClients = name => {
   return axios
-    .get(`${base_url}/client`, { headers })
+    .get(`${base_url}/client?name=${name}`, { headers })
     .then(res => {
       return {
         error: false,
@@ -200,9 +200,9 @@ export const patchClient = (id, client) => {
 };
 
 //Servicios de alta y consulta de clientes
-export const getCalls = () => {
+export const getCalls = (initDate, finDate) => {
   return axios
-    .get(`${base_url}/call`, { headers })
+    .get(`${base_url}/call/?init=${initDate}&fin=${finDate}`, { headers })
     .then(res => {
       return {
         error: false,

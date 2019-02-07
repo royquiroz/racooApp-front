@@ -17,7 +17,11 @@ class ClientCalls extends Component {
 
   componentWillMount() {
     const { client } = this.props;
-    this.setState({ calls: client.calls });
+    let calls = client.calls.sort(
+      (a, b) =>
+        new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+    );
+    this.setState({ calls: calls });
   }
 
   handleClick = () => {

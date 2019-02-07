@@ -50,9 +50,6 @@ class CallDetail extends Component {
 
     patchCallId(call._id, call).then(res => {
       this.setState({ message: res.msg, openMessage: true });
-      setTimeout(() => {
-        window.location.reload();
-      }, 2000);
     });
   };
 

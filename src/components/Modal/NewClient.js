@@ -5,31 +5,28 @@ import {
   DialogContent,
   TextField,
   Button,
-  MenuItem,
   Snackbar
 } from "@material-ui/core";
 //import Select from "react-select";
-import { getCompanies, postClient } from "../../service";
+import { postClient } from "../../service";
 
 class NewClient extends Component {
   constructor() {
     super();
     this.state = {
       client: {
-        company: "",
         name: "",
         last_name: ""
       },
       openMessage: false,
-      message: "",
-      companies: []
+      message: ""
     };
   }
 
   componentWillMount() {
-    getCompanies().then(res => {
-      this.setState({ companies: res.companies });
-    });
+    let { client } = this.state;
+    client.company = this.props.company._id;
+    this.setState({ client });
   }
 
   handleChange = e => {
@@ -57,7 +54,7 @@ class NewClient extends Component {
     let { client } = this.state;
 
     client = {
-      company: "",
+      company: this.props.company._id,
       name: "",
       last_name: ""
     };
@@ -65,36 +62,31 @@ class NewClient extends Component {
   };
 
   render() {
-    const { client, openMessage, message, companies } = this.state;
-    const { openModal, handleClose } = this.props;
+    const { client, openMessage, message } = this.state;
+    const { openModal, handleClose, company } = this.props;
 
     return (
       <div>
         <Dialog onClose={handleClose} open={openModal} scroll="body">
-          <DialogTitle onClose={handleClose}>Nueva Cliente</DialogTitle>
+          <DialogTitle onClose={handleClose}>Nuevo Cliente</DialogTitle>
           <DialogContent>
             <form onSubmit={this.handleSubmit}>
               <TextField
-                select
                 label="Compañia"
-                name="company"
+                value={
+                  company.kind === "NOTARY"
+                    ? `Notaria ${company.number}`
+                    : `${company.name}`
+                }
                 margin="normal"
-                value={client.company}
-                onChange={this.handleChange}
                 fullWidth
-              >
-                {companies.map((option, i) => (
-                  <MenuItem key={i} value={option._id}>
-                    {option.kind === "NOTARY"
-                      ? `Notaria ${option.number}`
-                      : `${option.name}`}
-                  </MenuItem>
-                ))}
-              </TextField>
+                disabled
+              />
               <TextField
                 label="Nombre"
                 name="name"
                 margin="normal"
+                value={client.name}
                 onChange={this.handleChange}
                 fullWidth
               />
@@ -102,6 +94,7 @@ class NewClient extends Component {
                 label="Apellido"
                 name="last_name"
                 margin="normal"
+                value={client.last_name}
                 onChange={this.handleChange}
                 fullWidth
               />

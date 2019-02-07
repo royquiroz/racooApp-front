@@ -5,6 +5,8 @@ import {
   Paper,
   InputBase,
   IconButton,
+  FormControlLabel,
+  Switch,
   CircularProgress
 } from "@material-ui/core";
 import { Add, Search } from "@material-ui/icons";
@@ -19,18 +21,16 @@ class Company extends Component {
     this.state = {
       companies: [],
       companySearch: "",
-      filtered: [],
       openModal: false,
-      loading: true
+      loading: true,
+      checked: true
     };
   }
 
   componentWillMount() {
-    getCompanies().then(res => {
-      setTimeout(() => {
-        this.setState({ companies: res.companies, loading: false });
-      }, 3000);
-    });
+    setTimeout(() => {
+      this.setState({ loading: false });
+    }, 2000);
   }
 
   handleClick = () => {
@@ -41,29 +41,28 @@ class Company extends Component {
     this.setState({ openModal: false });
   };
 
+  handleChange = e => {
+    this.setState({ companySearch: e.target.value });
+  };
+
   handleSearchCompany = e => {
-    const { companies } = this.state;
-    console.log(e.target.value);
+    const { companySearch, checked } = this.state;
 
-    let filtered = companies.filter(company =>
-      company.lawyer === undefined
-        ? company.name.toLowerCase().includes(e.target.value)
-        : company.lawyer.toLowerCase().includes(e.target.value)
-    );
+    this.setState({ loading: true });
+    getCompanies(companySearch, checked).then(res => {
+      setTimeout(() => {
+        this.setState({ companies: res.companies, loading: false });
+      }, 3000);
+    });
+  };
 
-    console.log(filtered);
-    this.setState({ filtered: filtered, companySearch: e.target.value });
+  switch = e => {
+    console.log(e.target.checked);
+    this.setState({ checked: !this.state.checked });
   };
 
   render() {
-    const {
-      companies,
-      companySearch,
-      filtered,
-      openModal,
-      loading
-    } = this.state;
-    console.log(companies);
+    const { companies, companySearch, openModal, loading } = this.state;
 
     return (
       <div className="container">
@@ -74,26 +73,35 @@ class Company extends Component {
             <Grid container spacing={16}>
               <Grid item sm={4} />
               <Grid item sm={3}>
-                <Paper elevation={1}>
+                <FormControlLabel
+                  control={
+                    <Switch
+                      checked={this.state.checked}
+                      onChange={this.switch}
+                    />
+                  }
+                  label="Notaria"
+                />
+                <Paper elevation={1} style={{ margin: "0 50px 30px 35px" }}>
                   <InputBase
                     placeholder="Buscar"
                     margin="none"
-                    onChange={this.handleSearchCompany}
+                    onChange={this.handleChange}
+                    value={companySearch}
                   />
-                  <IconButton aria-label="Buscar" disabled>
+                  <IconButton
+                    aria-label="Buscar"
+                    onClick={this.handleSearchCompany}
+                  >
                     <Search />
                   </IconButton>
                 </Paper>
               </Grid>
             </Grid>
             <Grid container spacing={24}>
-              {companySearch === ""
-                ? companies.map((company, i) => (
-                    <Template key={i} company={company} />
-                  ))
-                : filtered.map((company, i) => (
-                    <Template key={i} company={company} />
-                  ))}
+              {companies.map((company, i) => (
+                <Template key={i} company={company} />
+              ))}
               <Fab
                 className="fab"
                 size="large"

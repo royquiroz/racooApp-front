@@ -18,7 +18,11 @@ const User = ({ user }) => (
         <ListItemIcon>
           <Person />
         </ListItemIcon>
-        <ListItemText primary={`${user.name} ${user.last_name}`} />
+        <ListItemText
+          primary={`${user.name} ${
+            user.last_name === undefined ? "" : user.last_name
+          }`}
+        />
         <ListItemSecondaryAction>
           <IconButton aria-label="Comments">
             <Phone />

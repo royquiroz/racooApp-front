@@ -1,17 +1,10 @@
 import React, { Component } from "react";
-import {
-  Grid,
-  Paper,
-  Fab,
-  CircularProgress,
-  IconButton
-} from "@material-ui/core";
-import { Add, Search } from "@material-ui/icons";
+import { Grid, Paper, CircularProgress, IconButton } from "@material-ui/core";
+import { Search } from "@material-ui/icons";
 import { InlineDatePicker } from "material-ui-pickers";
 import moment from "moment";
 
 import TableCalls from "../Tables/TableCalls";
-import NewCall from "../Modal/NewCall";
 import { getCalls } from "../../service";
 
 class Call extends Component {
@@ -19,7 +12,6 @@ class Call extends Component {
     super();
     this.state = {
       calls: [],
-      filtered: [],
       dates: {
         init: "",
         fin: ""
@@ -31,20 +23,19 @@ class Call extends Component {
   }
 
   componentWillMount() {
-    getCalls().then(res => {
+    let initDate = moment(new Date()).format("YYYY-MM-DD");
+    let finDate = moment(new Date()).format("YYYY-MM-DD");
+
+    getCalls(initDate, finDate).then(res => {
       let calls = res.calls.sort(
         (a, b) =>
           new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
       );
-      let now = moment().format();
 
       let dates = {
-        init: now,
-        fin: now
+        init: initDate,
+        fin: finDate
       };
-
-      this.rangeDates(now, now, calls);
-      console.log(calls);
 
       setTimeout(() => {
         this.setState({
@@ -64,15 +55,6 @@ class Call extends Component {
     this.setState({ openModal: false });
   };
 
-  rangeDates = (dateIni, dateFin, calls) => {
-    let filtered = calls.filter(
-      call =>
-        moment(call.created_at).format("L") >= moment(dateIni).format("L") &&
-        moment(call.created_at).format("L") <= moment(dateFin).format("L")
-    );
-    this.setState({ filtered: filtered });
-  };
-
   handleChangeDate = (date, name) => {
     const { dates } = this.state;
 
@@ -83,13 +65,21 @@ class Call extends Component {
   };
 
   handleSearch = e => {
-    const { dates, calls } = this.state;
+    const { dates } = this.state;
+    let initDate = moment(dates.init).format("YYYY-MM-DD");
+    let finDate = moment(dates.fin).format("YYYY-MM-DD");
 
-    this.rangeDates(dates.init, dates.fin, calls);
+    getCalls(initDate, finDate).then(res => {
+      let calls = res.calls.sort(
+        (a, b) =>
+          new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+      );
+      this.setState({ calls: calls });
+    });
   };
 
   render() {
-    const { filtered, openModal, loading, fromCalls, dates } = this.state;
+    const { calls, loading, fromCalls, dates } = this.state;
 
     return (
       <div className="container">
@@ -127,27 +117,10 @@ class Call extends Component {
             </Grid>
             <Grid item sm={3} />
             <Paper style={{ width: "100%" }}>
-              <TableCalls
-                calls={filtered}
-                fromCalls={fromCalls}
-                {...this.props}
-              />
+              <TableCalls calls={calls} fromCalls={fromCalls} {...this.props} />
             </Paper>
-            <Fab
-              className="fab"
-              size="large"
-              color="primary"
-              onClick={this.handleClick}
-            >
-              <Add />
-            </Fab>
           </Grid>
         )}
-        <NewCall
-          openModal={openModal}
-          handleClose={this.handleClose}
-          {...this.props}
-        />
       </div>
     );
   }
