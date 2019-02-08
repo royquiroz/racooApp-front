@@ -86,7 +86,11 @@ class NewClient extends Component {
                 label="Nombre"
                 name="name"
                 margin="normal"
-                value={client.name}
+                value={
+                  client.last_name === undefined || client.last_name
+                    ? `${client.name}`
+                    : `${client.name} ${client.last_name}`
+                }
                 onChange={this.handleChange}
                 fullWidth
               />

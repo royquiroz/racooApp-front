@@ -8,7 +8,7 @@ class CompanyCalls extends Component {
     super();
     this.state = {
       calls: [],
-      fromCalls: true
+      fromCalls: false
     };
   }
 
