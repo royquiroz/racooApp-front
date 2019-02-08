@@ -48,7 +48,7 @@ class Auth extends Component {
         this.setState({ message: res.msg, open: true });
         setTimeout(() => {
           this.props.history.push("/");
-        }, 5000);
+        }, 2000);
       } else {
         this.setState({ message: res.msg, open: true });
       }

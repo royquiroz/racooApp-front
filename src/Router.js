@@ -95,7 +95,7 @@ const Router = () => (
         !localStorage.getItem("token") ? (
           <Auth {...props} auth="login" />
         ) : (
-          <Redirect to="/companies" />
+          <Redirect to="/" />
         )
       }
     />
@@ -106,7 +106,7 @@ const Router = () => (
         !localStorage.getItem("token") ? (
           <Auth {...props} auth="signup" />
         ) : (
-          <Redirect to="/companies" />
+          <Redirect to="/" />
         )
       }
     />

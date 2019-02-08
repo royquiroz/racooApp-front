@@ -6,6 +6,10 @@ class Home extends Component {
     this.state = {};
   }
 
+  componentWillMount() {
+    this.props.history.push("/companies");
+  }
+
   render() {
     return <div>Home</div>;
   }

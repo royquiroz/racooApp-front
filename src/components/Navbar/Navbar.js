@@ -64,7 +64,7 @@ class NavBar extends Component {
                 </Button>
               </div>
             ) : (
-              <Avatar
+              /*<Avatar
                 alt="profile_pic"
                 src={
                   user.profile_pic === null
@@ -72,7 +72,8 @@ class NavBar extends Component {
                     : user.profile_pic
                 }
                 className="avatar"
-              />
+              />*/
+              <div> </div>
             )}
           </Toolbar>
         </AppBar>
