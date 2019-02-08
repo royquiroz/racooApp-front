@@ -14,7 +14,11 @@ class CompanyCalls extends Component {
 
   componentWillMount() {
     const { company } = this.props;
-    this.setState({ calls: company.calls });
+    let calls = company.calls.sort(
+      (a, b) =>
+        new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+    );
+    this.setState({ calls: calls });
   }
 
   render() {

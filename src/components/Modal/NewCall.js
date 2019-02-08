@@ -9,11 +9,10 @@ import {
   Radio,
   FormControlLabel,
   Button,
-  MenuItem,
   Snackbar
 } from "@material-ui/core";
 //import Select from "react-select";
-import { getCompanies, postCall } from "../../service";
+import { postCall } from "../../service";
 
 class NewCall extends Component {
   constructor() {
@@ -24,7 +23,8 @@ class NewCall extends Component {
         client: "",
         kind: "",
         system: "",
-        problem: ""
+        problem: "",
+        user: ""
       },
       openMessage: false,
       message: "",
@@ -35,14 +35,12 @@ class NewCall extends Component {
 
   componentWillMount() {
     let { call } = this.state;
-    if (this.props.client) {
-      call.company = this.props.client.company._id;
-      call.client = this.props.client._id;
-    }
 
-    getCompanies().then(res => {
-      this.setState({ companies: res.companies, call: call });
-    });
+    call.company = this.props.client.company._id;
+    call.client = this.props.client._id;
+    call.user = JSON.parse(localStorage.getItem("user"))._id;
+
+    this.setState({ call: call });
   }
 
   handleChange = e => {
@@ -50,23 +48,9 @@ class NewCall extends Component {
 
     let field = e.target.name;
     call[field] = e.target.value;
-
-    call.user = JSON.parse(localStorage.getItem("user"))._id;
-
-    this.handleChangeList();
+    console.log(call);
 
     this.setState({ call: call });
-  };
-
-  handleChangeList = () => {
-    const { call, companies } = this.state;
-
-    let list;
-    if (call.company !== "") {
-      list = companies.filter(company => company._id === call.company);
-    }
-
-    this.setState({ listClients: list[0].clients });
   };
 
   handleSubmit = e => {
@@ -84,18 +68,20 @@ class NewCall extends Component {
     let { call } = this.state;
 
     call = {
-      company: "",
-      client: "",
+      company: this.props.client.company._id,
+      client: this.props.client._id,
       kind: "",
       system: "",
-      problem: ""
+      problem: "",
+      user: JSON.parse(localStorage.getItem("user"))._id
     };
     this.setState({ call: call });
   };
 
   render() {
-    const { call, openMessage, message, companies, listClients } = this.state;
-    const { openModal, handleClose } = this.props;
+    const { call, openMessage, message } = this.state;
+    const { openModal, handleClose, client } = this.props;
+    console.log(call);
 
     return (
       <div>
@@ -104,122 +90,95 @@ class NewCall extends Component {
           <DialogContent>
             <form onSubmit={this.handleSubmit}>
               <TextField
-                select
                 label="Compañia"
-                name="company"
+                value={
+                  client.company.kind === "NOTARY"
+                    ? `Notaria ${client.company.number}`
+                    : `${client.company.name}`
+                }
                 margin="normal"
-                value={call.company}
-                onChange={this.handleChange}
                 fullWidth
+                disabled
+              />
+              <TextField
+                label="Cliente"
+                value={`${client.name} ${client.last_name}`}
+                margin="normal"
+                fullWidth
+                disabled
+              />
+
+              <FormLabel component="legend" className="labelsRadios">
+                Tipo de Soporte
+              </FormLabel>
+              <RadioGroup
+                aria-label="kind"
+                name="kind"
+                onChange={this.handleChange}
+                value={call.kind}
+                row={true}
               >
-                {companies.map((company, i) => (
-                  <MenuItem key={i} value={company._id}>
-                    {company.kind === "NOTARY"
-                      ? `Notaria ${company.number}`
-                      : `${company.name}`}
-                  </MenuItem>
-                ))}
-              </TextField>
-              {(call.company !== "" && listClients.length > 0) ||
-              call.client !== "" ? (
-                <TextField
-                  select
-                  label="Cliente"
-                  name="client"
-                  margin="normal"
-                  value={call.client}
-                  onChange={this.handleChange}
-                  fullWidth
-                >
-                  {listClients.map((client, i) => (
-                    <MenuItem key={i} value={client._id}>
-                      {client.name} {client.last_name}
-                    </MenuItem>
-                  ))}
-                </TextField>
-              ) : null}
+                <FormControlLabel
+                  value="CALL"
+                  control={<Radio />}
+                  label="Llamada"
+                />
+                <FormControlLabel value="SOS" control={<Radio />} label="SOS" />
+                <FormControlLabel
+                  value="REVERSE"
+                  control={<Radio />}
+                  label="Inverso"
+                />
+              </RadioGroup>
 
-              {call.client !== "" && listClients.length > 0 ? (
-                <div>
-                  <FormLabel component="legend" className="labelsRadios">
-                    Tipo de Soporte
-                  </FormLabel>
-                  <RadioGroup
-                    aria-label="kind"
-                    name="kind"
-                    onChange={this.handleChange}
-                    row={true}
-                  >
-                    <FormControlLabel
-                      value="CALL"
-                      control={<Radio />}
-                      label="Llamada"
-                    />
-                    <FormControlLabel
-                      value="SOS"
-                      control={<Radio />}
-                      label="SOS"
-                    />
-                    <FormControlLabel
-                      value="REVERSE"
-                      control={<Radio />}
-                      label="Inverso"
-                    />
-                  </RadioGroup>
+              <FormLabel component="legend" className="labelsRadios">
+                Sistema
+              </FormLabel>
+              <RadioGroup
+                aria-label="system"
+                name="system"
+                onChange={this.handleChange}
+                value={call.system}
+                row={true}
+              >
+                <FormControlLabel
+                  value="MINOTARIA"
+                  control={<Radio />}
+                  label="MiNotaria"
+                />
+                <FormControlLabel
+                  value="CALCULOFACIL"
+                  control={<Radio />}
+                  label="CalculoFacil"
+                />
+                <FormControlLabel
+                  value="LISTASPB"
+                  control={<Radio />}
+                  label="ListasPB"
+                />
+                <FormControlLabel
+                  value="CFDI"
+                  control={<Radio />}
+                  label="CFDI"
+                />
+                <FormControlLabel value="UIF" control={<Radio />} label="UIF" />
+                <FormControlLabel
+                  value="RACOO NOTARIOS"
+                  control={<Radio />}
+                  label="Racoo Notarios"
+                />
+              </RadioGroup>
 
-                  <FormLabel component="legend" className="labelsRadios">
-                    Sistema
-                  </FormLabel>
-                  <RadioGroup
-                    aria-label="system"
-                    name="system"
-                    onChange={this.handleChange}
-                    row={true}
-                  >
-                    <FormControlLabel
-                      value="MINOTARIA"
-                      control={<Radio />}
-                      label="MiNotaria"
-                    />
-                    <FormControlLabel
-                      value="CALCULOFACIL"
-                      control={<Radio />}
-                      label="CalculoFacil"
-                    />
-                    <FormControlLabel
-                      value="LISTASPB"
-                      control={<Radio />}
-                      label="ListasPB"
-                    />
-                    <FormControlLabel
-                      value="CFDI"
-                      control={<Radio />}
-                      label="CFDI"
-                    />
-                    <FormControlLabel
-                      value="UIF"
-                      control={<Radio />}
-                      label="UIF"
-                    />
-                    <FormControlLabel
-                      value="RACOO NOTARIOS"
-                      control={<Radio />}
-                      label="Racoo Notarios"
-                    />
-                  </RadioGroup>
-
-                  <TextField
-                    multiline
-                    rows="4"
-                    label="Problema"
-                    name="problem"
-                    margin="normal"
-                    onChange={this.handleChange}
-                    fullWidth
-                  />
-                </div>
-              ) : null}
-
+              <TextField
+                multiline
+                rows="4"
+                label="Problema"
+                name="problem"
+                margin="normal"
+                onChange={this.handleChange}
+                value={call.problem}
+                fullWidth
+              />
               <Button
                 className="buttonForm"
                 type="submit"

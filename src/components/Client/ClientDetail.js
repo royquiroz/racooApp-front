@@ -3,13 +3,15 @@ import {
   AppBar,
   Tabs,
   Tab,
+  Fab,
   Typography,
   CircularProgress
 } from "@material-ui/core";
-import { AssignmentTwoTone, PhoneTwoTone } from "@material-ui/icons";
+import { Add, AssignmentTwoTone, PhoneTwoTone } from "@material-ui/icons";
 import { getClientId } from "../../service";
 import ClientData from "./ClientData";
 import ClientCalls from "./ClientCalls";
+import NewCall from "../Modal/NewCall";
 
 class ClientDetail extends Component {
   constructor() {
@@ -17,7 +19,8 @@ class ClientDetail extends Component {
     this.state = {
       client: [],
       value: 1,
-      loading: true
+      loading: true,
+      openModal: false
     };
   }
 
@@ -30,13 +33,20 @@ class ClientDetail extends Component {
     });
   }
 
+  handleClick = () => {
+    this.setState({ openModal: true });
+  };
+
+  handleClose = e => {
+    this.setState({ openModal: false });
+  };
+
   handleChange = (e, value) => {
     this.setState({ value: value });
   };
 
   render() {
-    const { client, value, loading } = this.state;
-    console.log(client);
+    const { client, value, loading, openModal } = this.state;
 
     return (
       <div className="container">
@@ -70,6 +80,20 @@ class ClientDetail extends Component {
                 <ClientCalls client={client} {...this.props} />
               </div>
             )}
+            <Fab
+              className="fab"
+              size="large"
+              color="primary"
+              onClick={this.handleClick}
+            >
+              <Add />
+            </Fab>
+            <NewCall
+              client={client}
+              openModal={openModal}
+              handleClose={this.handleClose}
+              {...this.props}
+            />
           </div>
         )}
       </div>

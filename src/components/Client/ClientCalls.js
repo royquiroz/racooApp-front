@@ -1,9 +1,7 @@
 import React, { Component } from "react";
-import { Grid, Paper, Typography, Fab } from "@material-ui/core";
-import { Add } from "@material-ui/icons";
+import { Grid, Paper, Typography } from "@material-ui/core";
 
 import TableCalls from "../Tables/TableCalls";
-import NewCall from "../Modal/NewCall";
 
 class ClientCalls extends Component {
   constructor() {
@@ -24,16 +22,8 @@ class ClientCalls extends Component {
     this.setState({ calls: calls });
   }
 
-  handleClick = () => {
-    this.setState({ openModal: true });
-  };
-
-  handleClose = e => {
-    this.setState({ openModal: false });
-  };
-
   render() {
-    const { calls, fromCalls, openModal } = this.state;
+    const { calls, fromCalls } = this.state;
 
     return (
       <div>
@@ -47,21 +37,7 @@ class ClientCalls extends Component {
               <TableCalls calls={calls} fromCalls={fromCalls} {...this.props} />
             </Paper>
           )}
-          <Fab
-            className="fab"
-            size="large"
-            color="primary"
-            onClick={this.handleClick}
-          >
-            <Add />
-          </Fab>
         </Grid>
-        <NewCall
-          client={this.props.client}
-          openModal={openModal}
-          handleClose={this.handleClose}
-          {...this.props}
-        />
       </div>
     );
   }

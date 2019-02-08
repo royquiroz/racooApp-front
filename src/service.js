@@ -219,13 +219,9 @@ export const getCalls = (initDate, finDate) => {
 };
 
 export const postCall = call => {
-  console.log(call);
-
   return axios
     .post(`${base_url}/call`, call, { headers })
     .then(res => {
-      console.log(res);
-
       return {
         error: false,
         call: res.data.call._id,
@@ -265,7 +261,7 @@ export const patchCallId = (id, call) => {
       return {
         error: false,
         call: res.data.call,
-        msg: "Llamada editada exitosamente"
+        msg: "Cambios guardados exitosamente"
       };
     })
     .catch(err => {
