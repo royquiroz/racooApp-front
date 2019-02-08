@@ -33,7 +33,7 @@ class ListMenu extends Component {
     localStorage.removeItem("user");
     this.setState({ message: "Cerraste Sesión exitosamente", isOpen: true });
     setTimeout(() => {
-      window.location.reload();
+      window.location = "/";
     }, 3000);
   };
 
