@@ -202,7 +202,7 @@ export const patchClient = (id, client) => {
 //Servicios de alta y consulta de clientes
 export const getCalls = (initDate, finDate) => {
   return axios
-    .get(`${base_url}/call/?init=${initDate}&fin=${finDate}`, { headers })
+    .get(`${base_url}/call?init=${initDate}&fin=${finDate}`, { headers })
     .then(res => {
       return {
         error: false,
