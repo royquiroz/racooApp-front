@@ -7,17 +7,25 @@ import {
   RadioGroup,
   Radio,
   FormControlLabel,
+  FormControl,
+  InputLabel,
+  Select,
+  OutlinedInput,
+  MenuItem,
   Button,
   Snackbar
 } from "@material-ui/core";
+import Selectv2 from "react-select";
+import moment from "moment";
 
-import { getCallId, patchCallId } from "../../service";
+import { getCallId, patchCallId, getClients } from "../../service";
 
 class CallDetail extends Component {
   constructor() {
     super();
     this.state = {
       call: [],
+      clients: [],
       loading: true,
       message: "",
       openMessage: false
@@ -27,12 +35,31 @@ class CallDetail extends Component {
   componentWillMount() {
     const { match } = this.props;
     getCallId(match.params.id).then(res => {
-      console.log(res.call);
+      this.setState({ call: res.call });
+    });
+
+    getClients("").then(res => {
+      res.clients.forEach(client => {
+        client.value = client._id;
+        client.company.number
+          ? (client.label = `${client.name} (Notaria ${client.company.number})`)
+          : (client.label = `${client.name} (${client.company.name})`);
+      });
+
       setTimeout(() => {
-        this.setState({ call: res.call, loading: false });
-      }, 3000);
+        this.setState({ clients: res.clients, loading: false });
+      }, 500);
     });
   }
+
+  handleSelect = e => {
+    const { call } = this.state;
+
+    call.client = e._id;
+    call.company = e.company._id;
+
+    this.setState({ call: call });
+  };
 
   handleChange = e => {
     const { call } = this.state;
@@ -50,90 +77,38 @@ class CallDetail extends Component {
 
     patchCallId(call._id, call).then(res => {
       this.setState({ message: res.msg, openMessage: true });
+      setTimeout(() => {
+        this.props.history.push(`/calls`);
+      }, 500);
     });
   };
 
   render() {
-    const { call, loading, message, openMessage } = this.state;
+    const { call, clients, loading, message, openMessage } = this.state;
+    console.log(clients);
+
     return (
       <div className="container">
         {loading ? (
           <CircularProgress />
         ) : (
           <div>
-            <h1>Detalle de llamada</h1>
+            <div>
+              <h1 style={{ margin: "0" }}>{call.client.name}</h1>
+              <p>{moment(call.created_at).format("LLLL")}</p>
+            </div>
             <form onSubmit={this.handleSubmit}>
               <Grid container spacing={24}>
-                <Grid item sm={3}>
-                  <FormLabel component="legend" align="left">
-                    Tipo de Soporte:{" "}
-                  </FormLabel>
-                  <RadioGroup
-                    aria-label="kind"
-                    name="kind"
-                    defaultValue={call.kind}
-                    onChange={this.handleChange}
-                    row={true}
-                  >
-                    <FormControlLabel
-                      value="CALL"
-                      control={<Radio />}
-                      label="Llamada"
-                    />
-                    <FormControlLabel
-                      value="SOS"
-                      control={<Radio />}
-                      label="SOS"
-                    />
-                    <FormControlLabel
-                      value="REVERSE"
-                      control={<Radio />}
-                      label="Inverso"
-                    />
-                  </RadioGroup>
-                </Grid>
-                <Grid item sm={8}>
-                  <FormLabel component="legend" align="left">
-                    Sistema:
-                  </FormLabel>
-                  <RadioGroup
-                    aria-label="system"
-                    name="system"
-                    defaultValue={call.system}
-                    onChange={this.handleChange}
-                    row={true}
-                  >
-                    <FormControlLabel
-                      value="MINOTARIA"
-                      control={<Radio />}
-                      label="MiNotaria"
-                    />
-                    <FormControlLabel
-                      value="CALCULOFACIL"
-                      control={<Radio />}
-                      label="CalculoFacil"
-                    />
-                    <FormControlLabel
-                      value="LISTASPB"
-                      control={<Radio />}
-                      label="ListasPB"
-                    />
-                    <FormControlLabel
-                      value="CFDI"
-                      control={<Radio />}
-                      label="CFDI"
-                    />
-                    <FormControlLabel
-                      value="UIF"
-                      control={<Radio />}
-                      label="UIF"
-                    />
-                    <FormControlLabel
-                      value="RACOO NOTARIOS"
-                      control={<Radio />}
-                      label="Racoo Notarios"
-                    />
-                  </RadioGroup>
+                <Grid item sm={4}>
+                  <Selectv2
+                    className="text-left"
+                    defaultValue={call.client._id}
+                    placeholder="Cliente"
+                    isSearchable
+                    name="client"
+                    options={clients}
+                    onChange={this.handleSelect}
+                  />
                 </Grid>
               </Grid>
               <Grid container spacing={24}>
@@ -164,7 +139,62 @@ class CallDetail extends Component {
                   />
                 </Grid>
               </Grid>
+
               <Grid container spacing={24}>
+                <Grid item sm={2}>
+                  <FormControl variant="outlined" fullWidth>
+                    <InputLabel htmlFor="outlined-system-simple">
+                      Sistema
+                    </InputLabel>
+                    <Select
+                      align="left"
+                      name="system"
+                      value={call.system}
+                      onChange={this.handleChange}
+                      input={
+                        <OutlinedInput
+                          labelWidth={60}
+                          name="system"
+                          id="outlined-system-simple"
+                        />
+                      }
+                    >
+                      <MenuItem value="MINOTARIA">Minotaria</MenuItem>
+                      <MenuItem value="CALCULOFACIL">Caculofacil</MenuItem>
+                      <MenuItem value="LISTASPB">ListasPB</MenuItem>
+                      <MenuItem value="CFDI">CFDI</MenuItem>
+                      <MenuItem value="UIF">UIF</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Grid>
+
+                <Grid item sm={1} />
+
+                <Grid item sm={2}>
+                  <FormControl variant="outlined" fullWidth>
+                    <InputLabel htmlFor="outlined-kind-simple">
+                      Tipo de Soporte
+                    </InputLabel>
+                    <Select
+                      align="left"
+                      name="kind"
+                      value={call.kind}
+                      onChange={this.handleChange}
+                      input={
+                        <OutlinedInput
+                          labelWidth={120}
+                          name="kind"
+                          id="outlined-kind-simple"
+                        />
+                      }
+                    >
+                      <MenuItem value="CALL">Llamada</MenuItem>
+                      <MenuItem value="SOS">S.O.S.</MenuItem>
+                      <MenuItem value="REVERSE">Inverso</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Grid>
+                <Grid item sm={1} />
                 <Grid item sm={3}>
                   <FormLabel component="legend" align="left">
                     Estatus:
@@ -188,34 +218,7 @@ class CallDetail extends Component {
                     />
                   </RadioGroup>
                 </Grid>
-                {/*<Grid item sm={3}>
-                  <FormLabel component="legend" align="left">
-                    Clasificaciòn:
-                  </FormLabel>
-                  <RadioGroup
-                    aria-label="classification"
-                    name="classification"
-                    defaultValue={call.classification}
-                    onChange={this.handleChange}
-                    row={true}
-                  >
-                    <FormControlLabel
-                      value="0"
-                      control={<Radio />}
-                      label="Facil"
-                    />
-                    <FormControlLabel
-                      value="1"
-                      control={<Radio />}
-                      label="Media"
-                    />
-                    <FormControlLabel
-                      value="2"
-                      control={<Radio />}
-                      label="Dificil"
-                    />
-                  </RadioGroup>
-        </Grid>*/}
+
                 <Grid item sm={3}>
                   <FormLabel component="legend" align="left">
                     Resultado:

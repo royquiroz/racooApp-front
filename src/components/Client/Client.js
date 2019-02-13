@@ -39,7 +39,7 @@ class Client extends Component {
     getClients(clientSearch).then(res => {
       setTimeout(() => {
         this.setState({ clients: res.clients, loading: false });
-      }, 3000);
+      }, 500);
     });
   };
 

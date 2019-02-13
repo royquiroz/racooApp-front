@@ -7,7 +7,7 @@ class Home extends Component {
   }
 
   componentWillMount() {
-    this.props.history.push("/companies");
+    this.props.history.push("/clients");
   }
 
   render() {

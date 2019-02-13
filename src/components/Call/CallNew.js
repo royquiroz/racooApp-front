@@ -7,17 +7,32 @@ import {
   RadioGroup,
   Radio,
   FormControlLabel,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  OutlinedInput,
   Button,
+  IconButton,
   Snackbar
 } from "@material-ui/core";
+import { Add } from "@material-ui/icons";
+import Selectv2 from "react-select";
 
-import { patchCallId } from "../../service";
+import { NewClient } from "../Modal/NewClient";
+import { postCall, getClients } from "../../service";
 
 class CallNew extends Component {
   constructor() {
     super();
     this.state = {
-      call: [],
+      call: {
+        client: "",
+        company: "",
+        system: "MINOTARIA",
+        kind: "CALL"
+      },
+      clients: [],
       loading: true,
       message: "",
       openMessage: false
@@ -25,10 +40,28 @@ class CallNew extends Component {
   }
 
   componentWillMount() {
-    setTimeout(() => {
-      this.setState({ loading: false });
-    }, 1000);
+    getClients("").then(res => {
+      res.clients.forEach(client => {
+        client.value = client._id;
+        client.company.number
+          ? (client.label = `${client.name} (Notaria ${client.company.number})`)
+          : (client.label = `${client.name} (${client.company.name})`);
+      });
+
+      setTimeout(() => {
+        this.setState({ clients: res.clients, loading: false });
+      }, 500);
+    });
   }
+
+  handleSelect = e => {
+    const { call } = this.state;
+
+    call.client = e._id;
+    call.company = e.company._id;
+
+    this.setState({ call: call });
+  };
 
   handleChange = e => {
     const { call } = this.state;
@@ -42,15 +75,20 @@ class CallNew extends Component {
 
   handleSubmit = e => {
     e.preventDefault();
-    const { call } = this.state;
+    let { call } = this.state;
+    call.user = JSON.parse(localStorage.getItem("user"))._id;
 
-    patchCallId(call._id, call).then(res => {
+    postCall(call).then(res => {
       this.setState({ message: res.msg, openMessage: true });
+      setTimeout(() => {
+        this.props.history.push(`/call/${res.call}`);
+      }, 2000);
     });
   };
 
   render() {
-    const { call, loading, message, openMessage } = this.state;
+    const { call, clients, loading, message, openMessage } = this.state;
+
     return (
       <div className="container">
         {loading ? (
@@ -59,80 +97,7 @@ class CallNew extends Component {
           <div>
             <h1>Nueva Llamada</h1>
             <form onSubmit={this.handleSubmit}>
-              <Grid container spacing={24}>
-                <Grid item sm={3}>
-                  <FormLabel component="legend" align="left">
-                    Tipo de Soporte:{" "}
-                  </FormLabel>
-                  <RadioGroup
-                    aria-label="kind"
-                    name="kind"
-                    defaultValue={call.kind}
-                    onChange={this.handleChange}
-                    row={true}
-                  >
-                    <FormControlLabel
-                      value="CALL"
-                      control={<Radio />}
-                      label="Llamada"
-                    />
-                    <FormControlLabel
-                      value="SOS"
-                      control={<Radio />}
-                      label="SOS"
-                    />
-                    <FormControlLabel
-                      value="REVERSE"
-                      control={<Radio />}
-                      label="Inverso"
-                    />
-                  </RadioGroup>
-                </Grid>
-                <Grid item sm={8}>
-                  <FormLabel component="legend" align="left">
-                    Sistema:
-                  </FormLabel>
-                  <RadioGroup
-                    aria-label="system"
-                    name="system"
-                    defaultValue={call.system}
-                    onChange={this.handleChange}
-                    row={true}
-                  >
-                    <FormControlLabel
-                      value="MINOTARIA"
-                      control={<Radio />}
-                      label="MiNotaria"
-                    />
-                    <FormControlLabel
-                      value="CALCULOFACIL"
-                      control={<Radio />}
-                      label="CalculoFacil"
-                    />
-                    <FormControlLabel
-                      value="LISTASPB"
-                      control={<Radio />}
-                      label="ListasPB"
-                    />
-                    <FormControlLabel
-                      value="CFDI"
-                      control={<Radio />}
-                      label="CFDI"
-                    />
-                    <FormControlLabel
-                      value="UIF"
-                      control={<Radio />}
-                      label="UIF"
-                    />
-                    <FormControlLabel
-                      value="RACOO NOTARIOS"
-                      control={<Radio />}
-                      label="Racoo Notarios"
-                    />
-                  </RadioGroup>
-                </Grid>
-              </Grid>
-              <Grid container spacing={24}>
+              <Grid container spacing={8}>
                 <Grid item sm={6}>
                   <TextField
                     label="Problema"
@@ -146,6 +111,80 @@ class CallNew extends Component {
                     onChange={this.handleChange}
                   />
                 </Grid>
+                <Grid item sm={1} />
+                <Grid item sm={4} style={{ marginTop: "15px" }}>
+                  <Selectv2
+                    className="text-left"
+                    defaultValue={call.client}
+                    placeholder="Cliente"
+                    isSearchable
+                    name="client"
+                    options={clients}
+                    onChange={this.handleSelect}
+                  />
+                  <IconButton aria-label="Nuevo Cliente">
+                    <Add />
+                  </IconButton>
+                </Grid>
+              </Grid>
+
+              <Grid container spacing={8}>
+                <Grid item sm={2}>
+                  <FormControl variant="outlined" fullWidth>
+                    <InputLabel htmlFor="outlined-system-simple">
+                      Sistema
+                    </InputLabel>
+                    <Select
+                      align="left"
+                      name="system"
+                      value={call.system}
+                      onChange={this.handleChange}
+                      input={
+                        <OutlinedInput
+                          labelWidth={60}
+                          name="system"
+                          id="outlined-system-simple"
+                        />
+                      }
+                    >
+                      <MenuItem value="MINOTARIA">Minotaria</MenuItem>
+                      <MenuItem value="CALCULOFACIL">Caculofacil</MenuItem>
+                      <MenuItem value="LISTASPB">ListasPB</MenuItem>
+                      <MenuItem value="CFDI">CFDI</MenuItem>
+                      <MenuItem value="UIF">UIF</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Grid>
+
+                <Grid item sm={1} />
+
+                <Grid item sm={2}>
+                  <FormControl variant="outlined" fullWidth>
+                    <InputLabel htmlFor="outlined-kind-simple">
+                      Tipo de Soporte
+                    </InputLabel>
+                    <Select
+                      align="left"
+                      name="kind"
+                      value={call.kind}
+                      onChange={this.handleChange}
+                      input={
+                        <OutlinedInput
+                          labelWidth={120}
+                          name="kind"
+                          id="outlined-kind-simple"
+                        />
+                      }
+                    >
+                      <MenuItem value="CALL">Llamada</MenuItem>
+                      <MenuItem value="SOS">S.O.S.</MenuItem>
+                      <MenuItem value="REVERSE">Inverso</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Grid>
+              </Grid>
+
+              <Grid container spacing={8}>
                 <Grid item sm={6}>
                   <TextField
                     label="Solución"
@@ -160,58 +199,7 @@ class CallNew extends Component {
                   />
                 </Grid>
               </Grid>
-              <Grid container spacing={24}>
-                <Grid item sm={3}>
-                  <FormLabel component="legend" align="left">
-                    Estatus:
-                  </FormLabel>
-                  <RadioGroup
-                    aria-label="status"
-                    name="status"
-                    defaultValue={call.status}
-                    onChange={this.handleChange}
-                    row={true}
-                  >
-                    <FormControlLabel
-                      value="PENDING"
-                      control={<Radio />}
-                      label="Pendiente"
-                    />
-                    <FormControlLabel
-                      value="FINALIZED"
-                      control={<Radio />}
-                      label="Finalizada"
-                    />
-                  </RadioGroup>
-                </Grid>
-                {/*<Grid item sm={3}>
-                  <FormLabel component="legend" align="left">
-                    Clasificaciòn:
-                  </FormLabel>
-                  <RadioGroup
-                    aria-label="classification"
-                    name="classification"
-                    defaultValue={call.classification}
-                    onChange={this.handleChange}
-                    row={true}
-                  >
-                    <FormControlLabel
-                      value="0"
-                      control={<Radio />}
-                      label="Facil"
-                    />
-                    <FormControlLabel
-                      value="1"
-                      control={<Radio />}
-                      label="Media"
-                    />
-                    <FormControlLabel
-                      value="2"
-                      control={<Radio />}
-                      label="Dificil"
-                    />
-                  </RadioGroup>
-        </Grid>*/}
+              <Grid container spacing={8}>
                 <Grid item sm={3}>
                   <FormLabel component="legend" align="left">
                     Resultado:
@@ -232,6 +220,29 @@ class CallNew extends Component {
                       value="UNPRODUCTIVE"
                       control={<Radio />}
                       label="Improductiva"
+                    />
+                  </RadioGroup>
+                </Grid>
+                <Grid item sm={3}>
+                  <FormLabel component="legend" align="left">
+                    Estatus:
+                  </FormLabel>
+                  <RadioGroup
+                    aria-label="status"
+                    name="status"
+                    defaultValue={call.status}
+                    onChange={this.handleChange}
+                    row={true}
+                  >
+                    <FormControlLabel
+                      value="PENDING"
+                      control={<Radio />}
+                      label="Pendiente"
+                    />
+                    <FormControlLabel
+                      value="FINALIZED"
+                      control={<Radio />}
+                      label="Finalizada"
                     />
                   </RadioGroup>
                 </Grid>
