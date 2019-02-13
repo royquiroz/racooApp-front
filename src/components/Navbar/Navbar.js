@@ -47,6 +47,16 @@ class NavBar extends Component {
                 >
                   <Menu />
                 </IconButton>
+
+                <Button
+                  variant="contained"
+                  color="primary"
+                  style={{ margin: "0 40%" }}
+                  component={NavLink}
+                  to="/call"
+                >
+                  Nueva Llamada
+                </Button>
               </div>
             ) : (
               <Typography color="inherit" className="grow" align="left">

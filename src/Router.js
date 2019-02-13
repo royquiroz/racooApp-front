@@ -7,6 +7,7 @@ import Client from "./components/Client/Client";
 import ClientDetail from "./components/Client/ClientDetail";
 import Call from "./components/Call/Call";
 import CallDetail from "./components/Call/CallDetail";
+import CallNew from "./components/Call/CallNew";
 import Home from "./components/Home";
 
 const Router = () => (
@@ -72,6 +73,17 @@ const Router = () => (
       render={props =>
         localStorage.getItem("token") ? (
           <Call {...props} />
+        ) : (
+          <Redirect to="/login" />
+        )
+      }
+    />
+    <Route
+      exact
+      path="/call"
+      render={props =>
+        localStorage.getItem("token") ? (
+          <CallNew {...props} />
         ) : (
           <Redirect to="/login" />
         )
