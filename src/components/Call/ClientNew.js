@@ -43,7 +43,6 @@ class NewClient extends Component {
     const { client } = this.state;
 
     client.company = e._id;
-    console.log(client);
 
     this.setState({ client: client });
   };
@@ -53,7 +52,6 @@ class NewClient extends Component {
 
     let field = e.target.name;
     client[field] = e.target.value;
-    console.log(client);
 
     this.setState({ client: client });
   };

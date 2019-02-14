@@ -15,7 +15,7 @@ class TableCalls extends Component {
     super();
     this.state = {
       page: 0,
-      rowsPerPage: 5
+      rowsPerPage: 10
     };
   }
 
@@ -31,10 +31,19 @@ class TableCalls extends Component {
     this.props.history.push(`/call/${id}`);
   };
 
+  renderKind = kind => {
+    if (kind === "CALL") {
+      return "Llamada";
+    } else if (kind === "SOS") {
+      return "S.O.S.";
+    } else {
+      return "Inverso";
+    }
+  };
+
   render() {
-    const { calls, fromCalls } = this.props;
+    const { calls, fromCalls, viewDetails } = this.props;
     const { page, rowsPerPage } = this.state;
-    console.log(calls);
 
     return (
       <Table>
@@ -73,7 +82,7 @@ class TableCalls extends Component {
                     {call.client.name} {call.client.last_name}
                   </TableCell>
                 ) : null}
-                <TableCell>{call.kind}</TableCell>
+                <TableCell>{this.renderKind(call.kind)}</TableCell>
                 <TableCell>{call.system}</TableCell>
                 {call.prev_db ? (
                   <TableCell>{call.prev_db_user}</TableCell>
@@ -83,12 +92,19 @@ class TableCalls extends Component {
                   </TableCell>
                 )}
                 {/*<TableCell>{call.classification}</TableCell>*/}
-                <TableCell>{call.status}</TableCell>
-                <TableCell>{call.ending}</TableCell>
-                <TableCell>{moment(call.created_at).format("lll")}</TableCell>
+                <TableCell>
+                  {call.status === "FINALIZED" ? "Finalizada" : "Pendiente"}
+                </TableCell>
+                <TableCell>
+                  {call.ending === "UNPRODUCTIVE"
+                    ? "Improductiva"
+                    : "Productiva"}
+                </TableCell>
+                <TableCell>{moment(call.created_at).format("ll")}</TableCell>
               </TableRow>
             ))}
-          {calls.length > 0 ? (
+
+          {viewDetails ? (
             <TableRow>
               <TableCell align="right" colSpan={fromCalls ? 7 : 5}>
                 Total de llamadas:
@@ -97,7 +113,7 @@ class TableCalls extends Component {
             </TableRow>
           ) : null}
 
-          {calls.length > 0 ? (
+          {viewDetails ? (
             <TableRow>
               <TableCell align="right" colSpan={fromCalls ? 7 : 5}>
                 Pendientes:{" "}
@@ -110,7 +126,7 @@ class TableCalls extends Component {
             </TableRow>
           ) : null}
 
-          {calls.length > 0 ? (
+          {viewDetails ? (
             <TableRow>
               <TableCell align="right" colSpan={fromCalls ? 6 : 4}>
                 Llamadas: {calls.filter(call => call.kind === "CALL").length}
@@ -124,7 +140,7 @@ class TableCalls extends Component {
             </TableRow>
           ) : null}
 
-          {calls.length > 0 ? (
+          {viewDetails ? (
             <TableRow>
               <TableCell align="center" colSpan={fromCalls ? 2 : 0}>
                 Minotaria:{" "}

@@ -24,7 +24,7 @@ class CallDetail extends Component {
   constructor() {
     super();
     this.state = {
-      call: [],
+      call: {},
       clients: [],
       loading: true,
       message: "",
@@ -74,6 +74,12 @@ class CallDetail extends Component {
     e.preventDefault();
     const { call } = this.state;
     call.user = JSON.parse(localStorage.getItem("user"))._id;
+
+    let record = {
+      user: JSON.parse(localStorage.getItem("user")).name,
+      update: moment().format()
+    };
+    call.record.push(record);
 
     patchCallId(call._id, call).then(res => {
       this.setState({ message: res.msg, openMessage: true });
@@ -243,6 +249,17 @@ class CallDetail extends Component {
                   </RadioGroup>
                 </Grid>
               </Grid>
+
+              <Grid container spacing={24}>
+                <ul className="list-records">
+                  {call.record.map((user, i) => (
+                    <li key={i}>
+                      {user.user} - {moment(user.update).format("llll")}
+                    </li>
+                  ))}
+                </ul>
+              </Grid>
+
               <Grid container spacing={24}>
                 <Grid item sm={12}>
                   <Button type="submit" variant="contained" color="primary">

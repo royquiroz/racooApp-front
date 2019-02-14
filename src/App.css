@@ -100,3 +100,9 @@
 .text-left {
   text-align: left !important;
 }
+
+.list-records {
+  list-style: none;
+  font-size: 12px;
+  padding-left: 2%;
+}

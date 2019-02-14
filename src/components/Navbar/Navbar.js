@@ -67,10 +67,10 @@ class NavBar extends Component {
             {!localStorage.getItem("token") ? (
               <div>
                 <Button component={NavLink} color="inherit" to="/login">
-                  Login
+                  Iniciar Sesión
                 </Button>
                 <Button component={NavLink} color="inherit" to="/signup">
-                  Sign Up
+                  Registrarse
                 </Button>
               </div>
             ) : (

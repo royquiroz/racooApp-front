@@ -1,5 +1,12 @@
 import React, { Component } from "react";
-import { Grid, Paper, CircularProgress, IconButton } from "@material-ui/core";
+import {
+  Grid,
+  Paper,
+  CircularProgress,
+  IconButton,
+  FormControlLabel,
+  Switch
+} from "@material-ui/core";
 import { Search } from "@material-ui/icons";
 import { InlineDatePicker } from "material-ui-pickers";
 import moment from "moment";
@@ -18,7 +25,8 @@ class Call extends Component {
       },
       openModal: false,
       loading: true,
-      fromCalls: true
+      fromCalls: true,
+      viewDetails: false
     };
   }
 
@@ -88,8 +96,14 @@ class Call extends Component {
     });
   };
 
+  handleViewDetails = e => {
+    const { viewDetails } = this.state;
+
+    this.setState({ viewDetails: !viewDetails });
+  };
+
   render() {
-    const { calls, loading, fromCalls, dates } = this.state;
+    const { calls, loading, fromCalls, dates, viewDetails } = this.state;
 
     return (
       <div className="container">
@@ -125,9 +139,20 @@ class Call extends Component {
                 <Search />
               </IconButton>
             </Grid>
-            <Grid item sm={3} />
+            <Grid item sm={1} />
+            <Grid item sm={2}>
+              <FormControlLabel
+                control={<Switch onChange={this.handleViewDetails} />}
+                label="Ver Detalles"
+              />
+            </Grid>
             <Paper style={{ width: "100%" }}>
-              <TableCalls calls={calls} fromCalls={fromCalls} {...this.props} />
+              <TableCalls
+                calls={calls}
+                fromCalls={fromCalls}
+                viewDetails={viewDetails}
+                {...this.props}
+              />
             </Paper>
           </Grid>
         )}

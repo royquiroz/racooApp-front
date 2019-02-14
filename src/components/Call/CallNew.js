@@ -79,7 +79,6 @@ class CallNew extends Component {
 
     let field = e.target.name;
     call[field] = e.target.value;
-    console.log(call);
 
     this.setState({ call: call });
   };
