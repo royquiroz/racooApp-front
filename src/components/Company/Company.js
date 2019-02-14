@@ -52,7 +52,7 @@ class Company extends Component {
     getCompanies(companySearch, checked).then(res => {
       setTimeout(() => {
         this.setState({ companies: res.companies, loading: false });
-      }, 3000);
+      }, 500);
     });
   };
 

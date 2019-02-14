@@ -66,7 +66,6 @@ class CallDetail extends Component {
 
     let field = e.target.name;
     call[field] = e.target.value;
-    console.log(call);
 
     this.setState({ call: call });
   };
@@ -74,6 +73,7 @@ class CallDetail extends Component {
   handleSubmit = e => {
     e.preventDefault();
     const { call } = this.state;
+    call.user = JSON.parse(localStorage.getItem("user"))._id;
 
     patchCallId(call._id, call).then(res => {
       this.setState({ message: res.msg, openMessage: true });
@@ -85,7 +85,6 @@ class CallDetail extends Component {
 
   render() {
     const { call, clients, loading, message, openMessage } = this.state;
-    console.log(clients);
 
     return (
       <div className="container">
@@ -95,6 +94,7 @@ class CallDetail extends Component {
           <div>
             <div>
               <h1 style={{ margin: "0" }}>{call.client.name}</h1>
+              <h4 style={{ marginTop: "0" }}>{call.client.company.key}</h4>
               <p>{moment(call.created_at).format("LLLL")}</p>
             </div>
             <form onSubmit={this.handleSubmit}>

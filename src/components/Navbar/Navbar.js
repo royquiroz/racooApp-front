@@ -6,8 +6,8 @@ import {
   Toolbar,
   Typography,
   IconButton,
-  Button,
-  Avatar
+  Button
+  //Avatar
 } from "@material-ui/core";
 import ListMenu from "./Menu";
 import Logo from "../../logo.png";
@@ -33,7 +33,7 @@ class NavBar extends Component {
   };
 
   render() {
-    const { user, open } = this.state;
+    const { /*user,*/ open } = this.state;
     return (
       <div className="root">
         <AppBar position="fixed" color="default">

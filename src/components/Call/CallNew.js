@@ -16,10 +16,10 @@ import {
   IconButton,
   Snackbar
 } from "@material-ui/core";
-import { Add } from "@material-ui/icons";
+import { Add, Refresh } from "@material-ui/icons";
 import Selectv2 from "react-select";
 
-import { NewClient } from "../Modal/NewClient";
+import NewClient from "./ClientNew";
 import { postCall, getClients } from "../../service";
 
 class CallNew extends Component {
@@ -35,24 +35,35 @@ class CallNew extends Component {
       clients: [],
       loading: true,
       message: "",
-      openMessage: false
+      openMessage: false,
+      openModal: false
     };
   }
 
   componentWillMount() {
+    this.searchClients();
+  }
+
+  searchClients = () => {
     getClients("").then(res => {
       res.clients.forEach(client => {
         client.value = client._id;
-        client.company.number
-          ? (client.label = `${client.name} (Notaria ${client.company.number})`)
-          : (client.label = `${client.name} (${client.company.name})`);
+        client.label = `${client.name} (${client.company.key})`;
       });
 
       setTimeout(() => {
         this.setState({ clients: res.clients, loading: false });
       }, 500);
     });
-  }
+  };
+
+  handleClick = () => {
+    this.setState({ openModal: true });
+  };
+
+  handleClose = e => {
+    this.setState({ openModal: false });
+  };
 
   handleSelect = e => {
     const { call } = this.state;
@@ -87,7 +98,14 @@ class CallNew extends Component {
   };
 
   render() {
-    const { call, clients, loading, message, openMessage } = this.state;
+    const {
+      call,
+      clients,
+      loading,
+      message,
+      openMessage,
+      openModal
+    } = this.state;
 
     return (
       <div className="container">
@@ -122,7 +140,16 @@ class CallNew extends Component {
                     options={clients}
                     onChange={this.handleSelect}
                   />
-                  <IconButton aria-label="Nuevo Cliente">
+                  <IconButton
+                    aria-label="Nuevo Cliente"
+                    onClick={this.searchClients}
+                  >
+                    <Refresh />
+                  </IconButton>
+                  <IconButton
+                    aria-label="Nuevo Cliente"
+                    onClick={this.handleClick}
+                  >
                     <Add />
                   </IconButton>
                 </Grid>
@@ -256,6 +283,11 @@ class CallNew extends Component {
               </Grid>
             </form>
             <Snackbar open={openMessage} message={message} />
+            <NewClient
+              openModal={openModal}
+              handleClose={this.handleClose}
+              {...this.props}
+            />
           </div>
         )}
       </div>

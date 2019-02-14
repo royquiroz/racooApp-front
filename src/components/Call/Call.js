@@ -26,7 +26,12 @@ class Call extends Component {
     let initDate = moment(new Date()).format("YYYY-MM-DD");
     let finDate = moment(new Date()).format("YYYY-MM-DD");
 
-    getCalls(initDate, finDate).then(res => {
+    getCalls(
+      initDate,
+      moment(finDate)
+        .add(1, "days")
+        .format("YYYY-MM-DD")
+    ).then(res => {
       let calls = res.calls.sort(
         (a, b) =>
           new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
@@ -69,7 +74,12 @@ class Call extends Component {
     let initDate = moment(dates.init).format("YYYY-MM-DD");
     let finDate = moment(dates.fin).format("YYYY-MM-DD");
 
-    getCalls(initDate, finDate).then(res => {
+    getCalls(
+      initDate,
+      moment(finDate)
+        .add(1, "days")
+        .format("YYYY-MM-DD")
+    ).then(res => {
       let calls = res.calls.sort(
         (a, b) =>
           new Date(b.created_at).getTime() - new Date(a.created_at).getTime()

@@ -99,6 +99,14 @@ class CompanyData extends Component {
               />
             ) : null}
             <TextField
+              label="Clave"
+              name="key"
+              margin="normal"
+              defaultValue={company.key}
+              fullWidth
+              onChange={this.handleChange}
+            />
+            <TextField
               label="Telefono"
               name="telephone"
               margin="normal"

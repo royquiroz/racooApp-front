@@ -66,6 +66,24 @@ export const getCompanies = (name, checked) => {
     });
 };
 
+export const getAllCompanies = () => {
+  return axios
+    .get(`${base_url}/company/all`, { headers })
+    .then(res => {
+      return {
+        error: false,
+        companies: res.data.companies,
+        msg: `${res.data.companies.length} Compañias encontradas exitosamente`
+      };
+    })
+    .catch(err => {
+      return {
+        error: err.response.status,
+        msg: err.response.data.msg
+      };
+    });
+};
+
 export const getCompanyId = id => {
   return axios
     .get(`${base_url}/company/${id}`, { headers })
