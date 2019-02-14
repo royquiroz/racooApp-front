@@ -70,10 +70,13 @@ class CallDetail extends Component {
     this.setState({ call: call });
   };
 
+  handleClose = e => {
+    this.setState({ openMessage: false });
+  };
+
   handleSubmit = e => {
     e.preventDefault();
     const { call } = this.state;
-    call.user = JSON.parse(localStorage.getItem("user"))._id;
 
     let record = {
       user: JSON.parse(localStorage.getItem("user")).name,
@@ -83,9 +86,9 @@ class CallDetail extends Component {
 
     patchCallId(call._id, call).then(res => {
       this.setState({ message: res.msg, openMessage: true });
-      setTimeout(() => {
+      /*setTimeout(() => {
         this.props.history.push(`/calls`);
-      }, 500);
+      }, 500);*/
     });
   };
 
@@ -252,6 +255,9 @@ class CallDetail extends Component {
 
               <Grid container spacing={24}>
                 <ul className="list-records">
+                  <li>
+                    {call.user.name} - {moment(call.created_at).format("llll")}
+                  </li>
                   {call.record.map((user, i) => (
                     <li key={i}>
                       {user.user} - {moment(user.update).format("llll")}
@@ -268,7 +274,12 @@ class CallDetail extends Component {
                 </Grid>
               </Grid>
             </form>
-            <Snackbar open={openMessage} message={message} />
+            <Snackbar
+              open={openMessage}
+              autoCapitalize={1000}
+              onClose={this.handleClose}
+              message={message}
+            />
           </div>
         )}
       </div>

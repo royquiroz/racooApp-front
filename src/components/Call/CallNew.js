@@ -62,7 +62,7 @@ class CallNew extends Component {
   };
 
   handleClose = e => {
-    this.setState({ openModal: false });
+    this.setState({ openModal: false, openMessage: false });
   };
 
   handleSelect = e => {
@@ -281,7 +281,12 @@ class CallNew extends Component {
                 </Grid>
               </Grid>
             </form>
-            <Snackbar open={openMessage} message={message} />
+            <Snackbar
+              open={openMessage}
+              autoHideDuration={500}
+              onClose={this.handleClose}
+              message={message}
+            />
             <NewClient
               openModal={openModal}
               handleClose={this.handleClose}

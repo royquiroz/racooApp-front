@@ -39,6 +39,10 @@ class NewClient extends Component {
     });
   }
 
+  handleClose = e => {
+    this.setState({ openMessage: false });
+  };
+
   handleSelect = e => {
     const { client } = this.state;
 
@@ -152,7 +156,12 @@ class NewClient extends Component {
             </form>
           </DialogContent>
         </Dialog>
-        <Snackbar onClose={handleClose} open={openMessage} message={message} />
+        <Snackbar
+          onClose={this.handleClose}
+          autoHideDuration={2000}
+          open={openMessage}
+          message={message}
+        />
       </div>
     );
   }
