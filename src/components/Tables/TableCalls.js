@@ -170,6 +170,7 @@ class TableCalls extends Component {
         <TableFooter>
           <TableRow>
             <TablePagination
+              labelRowsPerPage="Registros por Pagina"
               rowsPerPageOptions={[5, 10, 50, 100]}
               colSpan={7}
               count={calls.length}

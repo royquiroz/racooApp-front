@@ -34,7 +34,7 @@ class ListMenu extends Component {
     this.setState({ message: "Cerraste Sesión exitosamente", isOpen: true });
     setTimeout(() => {
       window.location = "/";
-    }, 3000);
+    }, 1000);
   };
 
   handleClose = e => {

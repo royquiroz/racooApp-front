@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 import {
   CircularProgress,
   Grid,
@@ -102,8 +103,30 @@ class CallDetail extends Component {
         ) : (
           <div>
             <div>
-              <h1 style={{ margin: "0" }}>{call.client.name}</h1>
-              <h4 style={{ marginTop: "0" }}>{call.client.company.key}</h4>
+              <h1 style={{ margin: "0" }}>
+                <Link
+                  target="_blank"
+                  to={`/client/${call.client._id}`}
+                  className="link"
+                >
+                  {call.client.name}
+                </Link>{" "}
+                <span className="telephone-client">
+                  Tel. {call.client.telephone} Ext. {call.client.extension}
+                </span>
+              </h1>
+              <h4 style={{ marginTop: "0" }}>
+                <Link
+                  target="_blank"
+                  to={`/company/${call.client.company._id}`}
+                  className="link"
+                >
+                  {call.client.company.key}
+                </Link>{" "}
+                <span className="telephone-company">
+                  Tel. {call.client.company.telephone}
+                </span>
+              </h4>
               <p>{moment(call.created_at).format("LLLL")}</p>
             </div>
             <form onSubmit={this.handleSubmit}>

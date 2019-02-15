@@ -47,7 +47,8 @@ class Auth extends Component {
       if (!res.error) {
         this.setState({ message: res.msg, open: true });
         setTimeout(() => {
-          this.props.history.push("/");
+          window.location.reload();
+          //this.props.history.push("/");
         }, 2000);
       } else {
         this.setState({ message: res.msg, open: true });
