@@ -279,7 +279,8 @@ class CallDetail extends Component {
               <Grid container spacing={24}>
                 <ul className="list-records">
                   <li>
-                    {call.user.name} - {moment(call.created_at).format("llll")}
+                    {call.prev_db ? call.prev_db_user : call.user.name} -{" "}
+                    {moment(call.created_at).format("llll")}
                   </li>
                   {call.record.map((user, i) => (
                     <li key={i}>

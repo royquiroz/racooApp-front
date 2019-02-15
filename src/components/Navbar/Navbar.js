@@ -76,11 +76,7 @@ class NavBar extends Component {
             ) : (
               <Avatar
                 alt="profile_pic"
-                src={
-                  user.profile_pic === null
-                    ? "https://res.cloudinary.com/royquiroz/image/upload/v1547066938/male-face01_n03jts.png"
-                    : user.profile_pic
-                }
+                src={user.img_profile}
                 className="avatar"
               />
             )}
