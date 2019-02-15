@@ -18,7 +18,8 @@ class NewClient extends Component {
         name: "",
         extension: "",
         positions: "",
-        description: ""
+        description: "",
+        company: ""
       },
       companies: [],
       openMessage: false,
@@ -78,7 +79,8 @@ class NewClient extends Component {
       name: "",
       extension: "",
       positions: "",
-      description: ""
+      description: "",
+      company: ""
     };
     this.setState({ client: client });
   };
