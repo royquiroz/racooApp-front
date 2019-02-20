@@ -44,6 +44,7 @@ class TableCalls extends Component {
   render() {
     const { calls, fromCalls, viewDetails } = this.props;
     const { page, rowsPerPage } = this.state;
+    console.log(calls);
 
     return (
       <Table>

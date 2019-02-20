@@ -18,6 +18,7 @@ import {
 } from "@material-ui/core";
 import { Add, Refresh } from "@material-ui/icons";
 import Selectv2 from "react-select";
+import moment from "moment";
 
 import NewClient from "./ClientNew";
 import { postCall, getClients } from "../../service";
@@ -30,7 +31,9 @@ class CallNew extends Component {
         client: "",
         company: "",
         system: "MINOTARIA",
-        kind: "CALL"
+        kind: "CALL",
+        status: "PENDING",
+        record: []
       },
       clients: [],
       loading: true,
@@ -86,7 +89,21 @@ class CallNew extends Component {
   handleSubmit = e => {
     e.preventDefault();
     let { call } = this.state;
-    call.user = JSON.parse(localStorage.getItem("user"))._id;
+
+    let history = {
+      problema: call.problem,
+      solucion: call.solution,
+      sistema: call.system,
+      soporte: call.kind,
+      estatus: call.status
+    };
+
+    let record = {
+      user: JSON.parse(localStorage.getItem("user")).name,
+      update: moment().format(),
+      history: JSON.stringify(history)
+    };
+    call.record.push(record);
 
     postCall(call).then(res => {
       this.setState({ message: res.msg, openMessage: true });
@@ -182,7 +199,7 @@ class CallNew extends Component {
                   </FormControl>
                 </Grid>
 
-                <Grid item sm={1} />
+                <Grid item sm={2} />
 
                 <Grid item sm={2}>
                   <FormControl variant="outlined" fullWidth>
@@ -226,6 +243,40 @@ class CallNew extends Component {
                 </Grid>
               </Grid>
               <Grid container spacing={8}>
+                <Grid item sm={2}>
+                  <FormControl variant="outlined" fullWidth>
+                    <InputLabel htmlFor="outlined-status-simple">
+                      Estatus
+                    </InputLabel>
+                    <Select
+                      align="left"
+                      name="status"
+                      value={call.status}
+                      onChange={this.handleChange}
+                      input={
+                        <OutlinedInput
+                          labelWidth={60}
+                          name="status"
+                          id="outlined-status-simple"
+                        />
+                      }
+                    >
+                      <MenuItem value="PENDING">Pendiente</MenuItem>
+                      <MenuItem value="FINALIZED">Finalizada</MenuItem>
+                      <MenuItem value="PENDING DEVELOPMENT">
+                        Pendiente Desarrollo
+                      </MenuItem>
+                      <MenuItem value="PENDING SUPPORT">
+                        Pendiente Soporte
+                      </MenuItem>
+                      <MenuItem value="PENDING VISITS">
+                        Pendiente Visitas
+                      </MenuItem>
+                      <MenuItem value="SALES">Ventas</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Grid>
+                <Grid item sm={2} />
                 <Grid item sm={3}>
                   <FormLabel component="legend" align="left">
                     Resultado:
@@ -246,29 +297,6 @@ class CallNew extends Component {
                       value="UNPRODUCTIVE"
                       control={<Radio />}
                       label="Improductiva"
-                    />
-                  </RadioGroup>
-                </Grid>
-                <Grid item sm={3}>
-                  <FormLabel component="legend" align="left">
-                    Estatus:
-                  </FormLabel>
-                  <RadioGroup
-                    aria-label="status"
-                    name="status"
-                    defaultValue={call.status}
-                    onChange={this.handleChange}
-                    row={true}
-                  >
-                    <FormControlLabel
-                      value="PENDING"
-                      control={<Radio />}
-                      label="Pendiente"
-                    />
-                    <FormControlLabel
-                      value="FINALIZED"
-                      control={<Radio />}
-                      label="Finalizada"
                     />
                   </RadioGroup>
                 </Grid>

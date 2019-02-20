@@ -14,8 +14,10 @@ import {
   OutlinedInput,
   MenuItem,
   Button,
+  IconButton,
   Snackbar
 } from "@material-ui/core";
+import { Info } from "@material-ui/icons";
 import Selectv2 from "react-select";
 import moment from "moment";
 
@@ -29,7 +31,9 @@ class CallDetail extends Component {
       clients: [],
       loading: true,
       message: "",
-      openMessage: false
+      openMessage: false,
+      indexHistory: "",
+      showHistory: false
     };
   }
 
@@ -52,6 +56,11 @@ class CallDetail extends Component {
       }, 500);
     });
   }
+
+  history = i => {
+    let { showHistory } = this.state;
+    this.setState({ showHistory: !showHistory, indexHistory: i });
+  };
 
   handleSelect = e => {
     const { call } = this.state;
@@ -77,24 +86,40 @@ class CallDetail extends Component {
 
   handleSubmit = e => {
     e.preventDefault();
-    const { call } = this.state;
+    let { call } = this.state;
+
+    let history = {
+      problema: call.problem,
+      solucion: call.solution,
+      sistema: call.system,
+      soporte: call.kind,
+      estatus: call.status
+    };
 
     let record = {
       user: JSON.parse(localStorage.getItem("user")).name,
-      update: moment().format()
+      update: moment().format(),
+      history: JSON.stringify(history)
     };
     call.record.push(record);
+    call.user = JSON.parse(localStorage.getItem("user"))._id;
 
     patchCallId(call._id, call).then(res => {
       this.setState({ message: res.msg, openMessage: true });
-      /*setTimeout(() => {
-        this.props.history.push(`/calls`);
-      }, 500);*/
     });
   };
 
   render() {
-    const { call, clients, loading, message, openMessage } = this.state;
+    const {
+      call,
+      clients,
+      loading,
+      message,
+      openMessage,
+      showHistory,
+      indexHistory
+    } = this.state;
+    console.log(call);
 
     return (
       <div className="container">
@@ -227,28 +252,38 @@ class CallDetail extends Component {
                   </FormControl>
                 </Grid>
                 <Grid item sm={1} />
-                <Grid item sm={3}>
-                  <FormLabel component="legend" align="left">
-                    Estatus:
-                  </FormLabel>
-                  <RadioGroup
-                    aria-label="status"
-                    name="status"
-                    defaultValue={call.status}
-                    onChange={this.handleChange}
-                    row={true}
-                  >
-                    <FormControlLabel
-                      value="PENDING"
-                      control={<Radio />}
-                      label="Pendiente"
-                    />
-                    <FormControlLabel
-                      value="FINALIZED"
-                      control={<Radio />}
-                      label="Finalizada"
-                    />
-                  </RadioGroup>
+                <Grid item sm={2}>
+                  <FormControl variant="outlined" fullWidth>
+                    <InputLabel htmlFor="outlined-status-simple">
+                      Estatus
+                    </InputLabel>
+                    <Select
+                      align="left"
+                      name="status"
+                      value={call.status}
+                      onChange={this.handleChange}
+                      input={
+                        <OutlinedInput
+                          labelWidth={60}
+                          name="status"
+                          id="outlined-status-simple"
+                        />
+                      }
+                    >
+                      <MenuItem value="PENDING">Pendiente</MenuItem>
+                      <MenuItem value="FINALIZED">Finalizada</MenuItem>
+                      <MenuItem value="PENDING DEVELOPMENT">
+                        Pendiente Desarrollo
+                      </MenuItem>
+                      <MenuItem value="PENDING SUPPORT">
+                        Pendiente Soporte
+                      </MenuItem>
+                      <MenuItem value="PENDING VISITS">
+                        Pendiente Visitas
+                      </MenuItem>
+                      <MenuItem value="SALES">Ventas</MenuItem>
+                    </Select>
+                  </FormControl>
                 </Grid>
 
                 <Grid item sm={3}>
@@ -278,13 +313,19 @@ class CallDetail extends Component {
 
               <Grid container spacing={24}>
                 <ul className="list-records">
-                  <li>
-                    {call.prev_db ? call.prev_db_user : call.user.name} -{" "}
-                    {moment(call.created_at).format("llll")}
-                  </li>
                   {call.record.map((user, i) => (
                     <li key={i}>
-                      {user.user} - {moment(user.update).format("llll")}
+                      {user.user} - {moment(user.update).format("llll")}{" "}
+                      <IconButton
+                        aria-label="Delete"
+                        style={{ padding: "0" }}
+                        onClick={() => this.history(i)}
+                      >
+                        <Info />
+                      </IconButton>
+                      {showHistory && indexHistory === i ? (
+                        <pre>{`${user.history}`}</pre>
+                      ) : null}
                     </li>
                   ))}
                 </ul>
