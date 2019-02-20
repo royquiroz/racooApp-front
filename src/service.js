@@ -47,6 +47,12 @@ export const login = auth => {
     });
 };
 
+export const signup = () => {
+  localStorage.removeItem("token");
+  localStorage.removeItem("user");
+  window.location.reload();
+};
+
 //Servicios de alta y consulta de compañias
 export const getCompanies = (name, checked) => {
   return axios
@@ -59,6 +65,9 @@ export const getCompanies = (name, checked) => {
       };
     })
     .catch(err => {
+      if (err.response.status === 403) {
+        signup();
+      }
       return {
         error: err.response.status,
         msg: err.response.data.msg
@@ -77,6 +86,9 @@ export const getAllCompanies = () => {
       };
     })
     .catch(err => {
+      if (err.response.status === 403) {
+        signup();
+      }
       return {
         error: err.response.status,
         msg: err.response.data.msg
@@ -95,6 +107,9 @@ export const getCompanyId = id => {
       };
     })
     .catch(err => {
+      if (err.response.status === 403) {
+        signup();
+      }
       return {
         error: err.response.status,
         msg: err.response.data.msg
@@ -107,7 +122,6 @@ export const postCompany = company => {
   return axios
     .post(`${base_url}/company`, company, { headers })
     .then(res => {
-      console.log(res);
       return {
         error: false,
         company: res.data.company._id,
@@ -115,6 +129,9 @@ export const postCompany = company => {
       };
     })
     .catch(err => {
+      if (err.response.status === 403) {
+        signup();
+      }
       return {
         error: err.response.status,
         msg: err.response.data.msg
@@ -123,11 +140,9 @@ export const postCompany = company => {
 };
 
 export const patchCompany = (id, company) => {
-  console.log(company);
   return axios
     .patch(`${base_url}/company/${id}`, company, { headers })
     .then(res => {
-      console.log(res);
       return {
         error: false,
         company: res.data.company,
@@ -135,6 +150,9 @@ export const patchCompany = (id, company) => {
       };
     })
     .catch(err => {
+      if (err.response.status === 403) {
+        signup();
+      }
       return {
         error: err.response.status,
         msg: err.response.data.msg
@@ -154,6 +172,9 @@ export const getClients = name => {
       };
     })
     .catch(err => {
+      if (err.response.status === 403) {
+        signup();
+      }
       return {
         error: err.response.status,
         msg: err.response.data.msg
@@ -172,6 +193,9 @@ export const postClient = client => {
       };
     })
     .catch(err => {
+      if (err.response.status === 403) {
+        signup();
+      }
       return {
         error: err.response.status,
         msg: err.response.data.msg
@@ -190,6 +214,9 @@ export const getClientId = id => {
       };
     })
     .catch(err => {
+      if (err.response.status === 403) {
+        signup();
+      }
       return {
         error: err.response.status,
         msg: err.response.data.msg
@@ -198,7 +225,6 @@ export const getClientId = id => {
 };
 
 export const patchClient = (id, client) => {
-  console.log(client);
   return axios
     .patch(`${base_url}/client/${id}`, client, { headers })
     .then(res => {
@@ -210,6 +236,9 @@ export const patchClient = (id, client) => {
       };
     })
     .catch(err => {
+      if (err.response.status === 403) {
+        signup();
+      }
       return {
         error: err.response.status,
         msg: err.response.data.msg
@@ -229,6 +258,9 @@ export const getCalls = (initDate, finDate) => {
       };
     })
     .catch(err => {
+      if (err.response.status === 403) {
+        signup();
+      }
       return {
         error: err.response.status,
         msg: err.response.data.msg
@@ -247,6 +279,9 @@ export const postCall = call => {
       };
     })
     .catch(err => {
+      if (err.response.status === 403) {
+        signup();
+      }
       return {
         error: err.response.status,
         msg: err.response.data.msg
@@ -265,6 +300,9 @@ export const getCallId = id => {
       };
     })
     .catch(err => {
+      if (err.response.status === 403) {
+        signup();
+      }
       return {
         error: err.response.status,
         msg: err.response.data.msg
@@ -283,6 +321,9 @@ export const patchCallId = (id, call) => {
       };
     })
     .catch(err => {
+      if (err.response.status === 403) {
+        signup();
+      }
       return {
         error: err.response.status,
         msg: err.response.data.msg

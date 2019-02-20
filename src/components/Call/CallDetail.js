@@ -84,8 +84,7 @@ class CallDetail extends Component {
     this.setState({ openMessage: false });
   };
 
-  handleSubmit = e => {
-    e.preventDefault();
+  createHistory = () => {
     let { call } = this.state;
 
     let history = {
@@ -93,8 +92,44 @@ class CallDetail extends Component {
       solucion: call.solution,
       sistema: call.system,
       soporte: call.kind,
-      estatus: call.status
+      estatus: call.status,
+      resultado: call.ending
     };
+
+    if (history.soporte === "CALL") {
+      history.soporte = "Llamada";
+    } else if (history.soporte === "SOS") {
+      history.soporte = "S.O.S.";
+    } else {
+      history.soporte = "Inverso";
+    }
+
+    if (history.estatus === "PENDING") {
+      history.estatus = "Pendiente";
+    } else if (history.estatus === "FINALIZED") {
+      history.estatus = "Finalizado";
+    } else if (history.estatus === "PENDING DEVELOPMENT") {
+      history.estatus = "Pendiente Desarrollo";
+    } else if (history.estatus === "PENDING SUPPORT") {
+      history.estatus = "Pendiente Soporte";
+    } else if (history.estatus === "PENDING VISITS") {
+      history.estatus = "Pendiente Visitas";
+    } else {
+      history.estatus = "Ventas";
+    }
+
+    history.resultado === "PRODUCTIVE"
+      ? (history.resultado = "Productiva")
+      : (history.resultado = "Improductiva");
+
+    return history;
+  };
+
+  handleSubmit = e => {
+    e.preventDefault();
+    let { call } = this.state;
+
+    let history = this.createHistory();
 
     let record = {
       user: JSON.parse(localStorage.getItem("user")).name,
@@ -102,7 +137,7 @@ class CallDetail extends Component {
       history: JSON.stringify(history)
     };
     call.record.push(record);
-    call.user = JSON.parse(localStorage.getItem("user"))._id;
+    //call.user = JSON.parse(localStorage.getItem("user"))._id;
 
     patchCallId(call._id, call).then(res => {
       this.setState({ message: res.msg, openMessage: true });
@@ -119,7 +154,6 @@ class CallDetail extends Component {
       showHistory,
       indexHistory
     } = this.state;
-    console.log(call);
 
     return (
       <div className="container">
@@ -324,7 +358,7 @@ class CallDetail extends Component {
                         <Info />
                       </IconButton>
                       {showHistory && indexHistory === i ? (
-                        <pre>{`${user.history}`}</pre>
+                        <pre>{user.history}</pre>
                       ) : null}
                     </li>
                   ))}

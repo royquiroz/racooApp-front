@@ -86,8 +86,7 @@ class CallNew extends Component {
     this.setState({ call: call });
   };
 
-  handleSubmit = e => {
-    e.preventDefault();
+  createHistory = () => {
     let { call } = this.state;
 
     let history = {
@@ -95,8 +94,44 @@ class CallNew extends Component {
       solucion: call.solution,
       sistema: call.system,
       soporte: call.kind,
-      estatus: call.status
+      estatus: call.status,
+      resultado: call.ending
     };
+
+    if (history.soporte === "CALL") {
+      history.soporte = "Llamada";
+    } else if (history.soporte === "SOS") {
+      history.soporte = "S.O.S.";
+    } else {
+      history.soporte = "Inverso";
+    }
+
+    if (history.estatus === "PENDING") {
+      history.estatus = "Pendiente";
+    } else if (history.estatus === "FINALIZED") {
+      history.estatus = "Finalizado";
+    } else if (history.estatus === "PENDING DEVELOPMENT") {
+      history.estatus = "Pendiente Desarrollo";
+    } else if (history.estatus === "PENDING SUPPORT") {
+      history.estatus = "Pendiente Soporte";
+    } else if (history.estatus === "PENDING VISITS") {
+      history.estatus = "Pendiente Visitas";
+    } else {
+      history.estatus = "Ventas";
+    }
+
+    history.resultado === "PRODUCTIVE"
+      ? (history.resultado = "Productiva")
+      : (history.resultado = "Improductiva");
+
+    return history;
+  };
+
+  handleSubmit = e => {
+    e.preventDefault();
+    let { call } = this.state;
+
+    let history = this.createHistory();
 
     let record = {
       user: JSON.parse(localStorage.getItem("user")).name,
