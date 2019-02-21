@@ -32,6 +32,7 @@ class CallDetail extends Component {
       loading: true,
       message: "",
       openMessage: false,
+      showRecord: false,
       indexHistory: "",
       showHistory: false
     };
@@ -125,6 +126,11 @@ class CallDetail extends Component {
     return history;
   };
 
+  toggleRecord = () => {
+    let { showRecord } = this.state;
+    this.setState({ showRecord: !showRecord });
+  };
+
   handleSubmit = e => {
     e.preventDefault();
     let { call } = this.state;
@@ -134,9 +140,16 @@ class CallDetail extends Component {
     let record = {
       user: JSON.parse(localStorage.getItem("user")).name,
       update: moment().format(),
-      history: JSON.stringify(history)
+      history: history
     };
-    call.record.push(record);
+
+    if (
+      JSON.stringify(call.record[call.record.length - 1].history) !==
+      JSON.stringify(history)
+    ) {
+      call.record.unshift(record);
+    }
+
     //call.user = JSON.parse(localStorage.getItem("user"))._id;
 
     patchCallId(call._id, call).then(res => {
@@ -151,6 +164,7 @@ class CallDetail extends Component {
       loading,
       message,
       openMessage,
+      showRecord,
       showHistory,
       indexHistory
     } = this.state;
@@ -255,6 +269,10 @@ class CallDetail extends Component {
                       <MenuItem value="LISTASPB">ListasPB</MenuItem>
                       <MenuItem value="CFDI">CFDI</MenuItem>
                       <MenuItem value="UIF">UIF</MenuItem>
+                      <MenuItem value="RACOO NOTARIOS">Racoo Notarios</MenuItem>
+                      <MenuItem value="MINOTARIA/IMPLEMENTACION">
+                        Minotaria(Implementación)
+                      </MenuItem>
                     </Select>
                   </FormControl>
                 </Grid>
@@ -346,30 +364,39 @@ class CallDetail extends Component {
               </Grid>
 
               <Grid container spacing={24}>
-                <ul className="list-records">
-                  {call.record.map((user, i) => (
-                    <li key={i}>
-                      {user.user} - {moment(user.update).format("llll")}{" "}
-                      <IconButton
-                        aria-label="Delete"
-                        style={{ padding: "0" }}
-                        onClick={() => this.history(i)}
-                      >
-                        <Info />
-                      </IconButton>
-                      {showHistory && indexHistory === i ? (
-                        <pre>{user.history}</pre>
-                      ) : null}
-                    </li>
-                  ))}
-                </ul>
-              </Grid>
-
-              <Grid container spacing={24}>
                 <Grid item sm={12}>
                   <Button type="submit" variant="contained" color="primary">
                     Guardar
                   </Button>
+                </Grid>
+              </Grid>
+
+              <Grid container spacing={24}>
+                <Grid item sm={1}>
+                  <IconButton onClick={this.toggleRecord}>
+                    <Info />
+                  </IconButton>
+                </Grid>
+              </Grid>
+
+              <Grid container spacing={24}>
+                <Grid item sm={5}>
+                  {showRecord ? (
+                    <ul className="list-records">
+                      {call.record.map((user, i) => (
+                        <li
+                          key={i}
+                          onClick={() => this.history(i)}
+                          style={{ cursor: "pointer" }}
+                        >
+                          {user.user} - {moment(user.update).format("llll")}{" "}
+                          {showHistory && indexHistory === i ? (
+                            <pre>{JSON.stringify(user.history, null, 2)}</pre>
+                          ) : null}
+                        </li>
+                      ))}
+                    </ul>
+                  ) : null}
                 </Grid>
               </Grid>
             </form>

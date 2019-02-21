@@ -136,7 +136,7 @@ class CallNew extends Component {
     let record = {
       user: JSON.parse(localStorage.getItem("user")).name,
       update: moment().format(),
-      history: JSON.stringify(history)
+      history: history
     };
     call.record.push(record);
 
@@ -230,6 +230,10 @@ class CallNew extends Component {
                       <MenuItem value="LISTASPB">ListasPB</MenuItem>
                       <MenuItem value="CFDI">CFDI</MenuItem>
                       <MenuItem value="UIF">UIF</MenuItem>
+                      <MenuItem value="RACOO NOTARIOS">Racoo Notarios</MenuItem>
+                      <MenuItem value="MINOTARIA/IMPLEMENTACION">
+                        Minotaria(Implementación)
+                      </MenuItem>
                     </Select>
                   </FormControl>
                 </Grid>

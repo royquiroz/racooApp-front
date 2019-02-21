@@ -51,7 +51,11 @@ class TableCalls extends Component {
         <TableHead>
           <TableRow>
             {fromCalls ? <TableCell>Compañia</TableCell> : null}
-            {fromCalls ? <TableCell>Cliente</TableCell> : null}
+            {fromCalls ? (
+              <TableCell>Cliente/Problema</TableCell>
+            ) : (
+              <TableCell>Problema</TableCell>
+            )}
             <TableCell>Tipo de Soporte</TableCell>
             <TableCell>Sistema</TableCell>
             <TableCell>Consultor</TableCell>
@@ -80,9 +84,18 @@ class TableCalls extends Component {
                 ) : null}
                 {fromCalls ? (
                   <TableCell>
-                    {call.client.name} {call.client.last_name}
+                    {call.client.name} {call.client.last_name} <br />
+                    {call.problem.length > 75
+                      ? `${call.problem.substring(0, 75)}...`
+                      : call.problem}
                   </TableCell>
-                ) : null}
+                ) : (
+                  <TableCell>
+                    {call.problem.length > 75
+                      ? `${call.problem.substring(0, 75)}...`
+                      : call.problem}
+                  </TableCell>
+                )}
                 <TableCell>{this.renderKind(call.kind)}</TableCell>
                 <TableCell>{call.system}</TableCell>
                 {call.prev_db ? (
@@ -101,7 +114,7 @@ class TableCalls extends Component {
                     ? "Improductiva"
                     : "Productiva"}
                 </TableCell>
-                <TableCell>{moment(call.created_at).format("ll")}</TableCell>
+                <TableCell>{moment(call.created_at).format("L")}</TableCell>
               </TableRow>
             ))}
 
