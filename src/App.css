@@ -113,6 +113,12 @@
   color: black;
 }
 
+.link:hover {
+  background-color: rgb(153, 153, 153, 0.1);
+  border-radius: 5px;
+  padding: 1px 1.5px;
+}
+
 .telephone-client {
   font-size: 16px;
   font-weight: normal;

@@ -10,9 +10,9 @@ import {
 } from "@material-ui/core";
 import estados from "../../helpers/states.json";
 
-const CardCompany = ({ company }) => (
+const CardCompany = ({ company, goToCompany }) => (
   <Grid item md={3}>
-    <Card>
+    <Card onClick={() => goToCompany(company)} className="pointer">
       <CardContent>
         {/*<Typography align="left" color="textSecondary">
           {company.kind}

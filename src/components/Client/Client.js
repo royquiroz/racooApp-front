@@ -28,6 +28,10 @@ class Client extends Component {
     }, 2000);
   }
 
+  goToClient = client => {
+    this.props.history.push(`/client/${client._id}`);
+  };
+
   handleChange = e => {
     this.setState({ clientSearch: e.target.value });
   };
@@ -73,7 +77,11 @@ class Client extends Component {
             </Grid>
             <Grid container spacing={24}>
               {clients.map((client, i) => (
-                <CardClient key={i} client={client} />
+                <CardClient
+                  key={i}
+                  client={client}
+                  goToClient={this.goToClient}
+                />
               ))}
             </Grid>
           </div>

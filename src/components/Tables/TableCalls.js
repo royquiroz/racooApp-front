@@ -84,7 +84,10 @@ class TableCalls extends Component {
                 ) : null}
                 {fromCalls ? (
                   <TableCell>
-                    {call.client.name} {call.client.last_name} <br />
+                    <div style={{ fontWeight: "bold" }}>
+                      {call.client.name} {call.client.last_name}
+                    </div>{" "}
+                    <br />
                     {call.problem.length > 75
                       ? `${call.problem.substring(0, 75)}...`
                       : call.problem}

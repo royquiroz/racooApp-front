@@ -33,6 +33,10 @@ class Company extends Component {
     }, 2000);
   }
 
+  goToCompany = company => {
+    this.props.history.push(`/company/${company._id}`);
+  };
+
   handleClick = () => {
     this.setState({ openModal: true });
   };
@@ -100,7 +104,11 @@ class Company extends Component {
             </Grid>
             <Grid container spacing={24}>
               {companies.map((company, i) => (
-                <Template key={i} company={company} />
+                <Template
+                  key={i}
+                  company={company}
+                  goToCompany={this.goToCompany}
+                />
               ))}
               <Fab
                 className="fab"

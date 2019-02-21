@@ -9,9 +9,9 @@ import {
   Typography
 } from "@material-ui/core";
 
-const CardClient = ({ client }) => (
+const CardClient = ({ client, goToClient }) => (
   <Grid item md={3}>
-    <Card>
+    <Card onClick={() => goToClient(client)} className="pointer">
       <CardContent>
         <Typography variant="title" component="h5">
           {client.name} {client.last_name}

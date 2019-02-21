@@ -143,10 +143,7 @@ class CallDetail extends Component {
       history: history
     };
 
-    if (
-      JSON.stringify(call.record[call.record.length - 1].history) !==
-      JSON.stringify(history)
-    ) {
+    if (JSON.stringify(call.record[0].history) !== JSON.stringify(history)) {
       call.record.unshift(record);
     }
 
@@ -380,14 +377,14 @@ class CallDetail extends Component {
               </Grid>
 
               <Grid container spacing={24}>
-                <Grid item sm={5}>
+                <Grid item sm={3}>
                   {showRecord ? (
                     <ul className="list-records">
                       {call.record.map((user, i) => (
                         <li
                           key={i}
                           onClick={() => this.history(i)}
-                          style={{ cursor: "pointer" }}
+                          className="pointer"
                         >
                           {user.user} - {moment(user.update).format("llll")}{" "}
                           {showHistory && indexHistory === i ? (
