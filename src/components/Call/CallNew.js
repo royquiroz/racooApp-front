@@ -32,7 +32,7 @@ class CallNew extends Component {
         company: "",
         system: "MINOTARIA",
         kind: "CALL",
-        status: "PENDING",
+        status: "PENDING SUPPORT",
         record: []
       },
       clients: [],
@@ -106,9 +106,7 @@ class CallNew extends Component {
       history.soporte = "Inverso";
     }
 
-    if (history.estatus === "PENDING") {
-      history.estatus = "Pendiente";
-    } else if (history.estatus === "FINALIZED") {
+    if (history.estatus === "FINALIZED") {
       history.estatus = "Finalizado";
     } else if (history.estatus === "PENDING DEVELOPMENT") {
       history.estatus = "Pendiente Desarrollo";
@@ -301,7 +299,6 @@ class CallNew extends Component {
                         />
                       }
                     >
-                      <MenuItem value="PENDING">Pendiente</MenuItem>
                       <MenuItem value="FINALIZED">Finalizada</MenuItem>
                       <MenuItem value="PENDING DEVELOPMENT">
                         Pendiente Desarrollo

@@ -105,9 +105,7 @@ class CallDetail extends Component {
       history.soporte = "Inverso";
     }
 
-    if (history.estatus === "PENDING") {
-      history.estatus = "Pendiente";
-    } else if (history.estatus === "FINALIZED") {
+    if (history.estatus === "FINALIZED") {
       history.estatus = "Finalizado";
     } else if (history.estatus === "PENDING DEVELOPMENT") {
       history.estatus = "Pendiente Desarrollo";
@@ -318,7 +316,6 @@ class CallDetail extends Component {
                         />
                       }
                     >
-                      <MenuItem value="PENDING">Pendiente</MenuItem>
                       <MenuItem value="FINALIZED">Finalizada</MenuItem>
                       <MenuItem value="PENDING DEVELOPMENT">
                         Pendiente Desarrollo

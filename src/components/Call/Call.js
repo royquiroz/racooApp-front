@@ -146,14 +146,18 @@ class Call extends Component {
                 label="Ver Detalles"
               />
             </Grid>
-            <Paper style={{ width: "100%" }}>
-              <TableCalls
-                calls={calls}
-                fromCalls={fromCalls}
-                viewDetails={viewDetails}
-                {...this.props}
-              />
-            </Paper>
+            {calls.length > 0 ? (
+              <Paper className="width100">
+                <TableCalls
+                  calls={calls}
+                  fromCalls={fromCalls}
+                  viewDetails={viewDetails}
+                  {...this.props}
+                />
+              </Paper>
+            ) : (
+              <h1 className="width100">Sin Resultados</h1>
+            )}
           </Grid>
         )}
       </div>

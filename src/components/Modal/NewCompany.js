@@ -81,7 +81,9 @@ class NewCompany extends Component {
                 label="Clave"
                 name="key"
                 margin="normal"
+                helperText="La Clave es obligatoria"
                 onChange={this.handleChange}
+                required
                 fullWidth
               />
               {company.kind === "COMPANY" ? (

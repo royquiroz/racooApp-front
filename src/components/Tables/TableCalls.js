@@ -31,6 +31,20 @@ class TableCalls extends Component {
     this.props.history.push(`/call/${id}`);
   };
 
+  renderStatus = status => {
+    if (status === "FINALIZED") {
+      return "Finalizado";
+    } else if (status === "PENDING DEVELOPMENT") {
+      return "Pendiente Desarrollo";
+    } else if (status === "PENDING SUPPORT") {
+      return "Pendiente Soporte";
+    } else if (status === "PENDING VISITS") {
+      return "Pendiente Visitas";
+    } else {
+      return "Ventas";
+    }
+  };
+
   renderKind = kind => {
     if (kind === "CALL") {
       return "Llamada";
@@ -71,8 +85,12 @@ class TableCalls extends Component {
             .map((call, i) => (
               <TableRow
                 key={i}
-                className="pointer"
                 hover
+                className={
+                  call.status.includes("PENDING")
+                    ? "color-pending pointer"
+                    : "pointer"
+                }
                 onClick={() => this.goToCall(call._id)}
               >
                 {fromCalls ? (
@@ -109,9 +127,7 @@ class TableCalls extends Component {
                   </TableCell>
                 )}
                 {/*<TableCell>{call.classification}</TableCell>*/}
-                <TableCell>
-                  {call.status === "FINALIZED" ? "Finalizada" : "Pendiente"}
-                </TableCell>
+                <TableCell>{this.renderStatus(call.status)}</TableCell>
                 <TableCell>
                   {call.ending === "UNPRODUCTIVE"
                     ? "Improductiva"
@@ -132,9 +148,23 @@ class TableCalls extends Component {
 
           {viewDetails ? (
             <TableRow>
-              <TableCell align="right" colSpan={fromCalls ? 7 : 5}>
-                Pendientes:{" "}
-                {calls.filter(call => call.status === "PENDING").length}
+              <TableCell align="right" colSpan={fromCalls ? 4 : 2}>
+                Ventas: {calls.filter(call => call.status === "SALES").length}
+              </TableCell>
+              <TableCell align="center">
+                Pendientes Soporte:{" "}
+                {calls.filter(call => call.status === "PENDING SUPPORT").length}
+              </TableCell>
+              <TableCell align="center">
+                Pendientes Desarrollo:{" "}
+                {
+                  calls.filter(call => call.status === "PENDING DEVELOPMENT")
+                    .length
+                }
+              </TableCell>
+              <TableCell align="center">
+                Pendientes Visitas:{" "}
+                {calls.filter(call => call.status === "PENDING VISITS").length}
               </TableCell>
               <TableCell align="center">
                 Finalizadas:{" "}

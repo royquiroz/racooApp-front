@@ -69,6 +69,7 @@ class Company extends Component {
             <Grid container spacing={16}>
               <Grid item sm={4} />
               <Grid item sm={3}>
+                <h2>Compañias</h2>
                 <Paper elevation={1} style={{ margin: "0 50px 30px 35px" }}>
                   <InputBase
                     placeholder="Buscar"
@@ -78,6 +79,7 @@ class Company extends Component {
                   />
                   <IconButton
                     aria-label="Buscar"
+                    style={{ padding: "5px" }}
                     onClick={this.handleSearchCompany}
                   >
                     <Search />
