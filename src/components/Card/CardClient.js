@@ -11,7 +11,7 @@ import {
 
 const CardClient = ({ client, goToClient }) => (
   <Grid item md={3}>
-    <Card onClick={() => goToClient(client)} className="pointer">
+    <Card onClick={() => goToClient(client)} className="pointer link">
       <CardContent>
         <Typography variant="title" component="h5">
           {client.name} {client.last_name}

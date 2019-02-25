@@ -56,7 +56,7 @@ export const signup = () => {
 //Servicios de alta y consulta de compañias
 export const getCompanies = (name, checked) => {
   return axios
-    .get(`${base_url}/company?name=${name}&checked=${checked}`, { headers })
+    .get(`${base_url}/company?name=${name}`, { headers })
     .then(res => {
       return {
         error: false,

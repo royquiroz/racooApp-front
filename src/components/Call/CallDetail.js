@@ -33,8 +33,7 @@ class CallDetail extends Component {
       message: "",
       openMessage: false,
       showRecord: false,
-      indexHistory: "",
-      showHistory: false
+      indexHistory: ""
     };
   }
 
@@ -59,8 +58,9 @@ class CallDetail extends Component {
   }
 
   history = i => {
-    let { showHistory } = this.state;
-    this.setState({ showHistory: !showHistory, indexHistory: i });
+    let { indexHistory } = this.state;
+    indexHistory === i ? (indexHistory = "") : (indexHistory = i);
+    this.setState({ indexHistory: indexHistory });
   };
 
   handleSelect = e => {
@@ -162,7 +162,6 @@ class CallDetail extends Component {
       message,
       openMessage,
       showRecord,
-      showHistory,
       indexHistory
     } = this.state;
 
@@ -177,7 +176,7 @@ class CallDetail extends Component {
                 <Link
                   target="_blank"
                   to={`/client/${call.client._id}`}
-                  className="link"
+                  className="link link-words"
                 >
                   {call.client.name}
                 </Link>{" "}
@@ -189,7 +188,7 @@ class CallDetail extends Component {
                 <Link
                   target="_blank"
                   to={`/company/${call.client.company._id}`}
-                  className="link"
+                  className="link link-words"
                 >
                   {call.client.company.key}
                 </Link>{" "}
@@ -377,18 +376,18 @@ class CallDetail extends Component {
               </Grid>
 
               <Grid container spacing={24}>
-                <Grid item sm={3}>
+                <Grid item sm={12}>
                   {showRecord ? (
                     <ul className="list-records">
                       {call.record.map((user, i) => (
-                        <li
-                          key={i}
-                          onClick={() => this.history(i)}
-                          className="pointer"
-                        >
-                          {user.user} - {moment(user.update).format("llll")}{" "}
-                          {showHistory && indexHistory === i ? (
-                            <pre>{JSON.stringify(user.history, null, 2)}</pre>
+                        <li key={i} onClick={() => this.history(i)}>
+                          <span className="pointer">
+                            {user.user} - {moment(user.update).format("llll")}
+                          </span>{" "}
+                          {indexHistory === i ? (
+                            <div className="pre">
+                              {JSON.stringify(user.history, null, 2)}
+                            </div>
                           ) : null}
                         </li>
                       ))}

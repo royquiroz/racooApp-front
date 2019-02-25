@@ -5,8 +5,6 @@ import {
   Paper,
   InputBase,
   IconButton,
-  FormControlLabel,
-  Switch,
   CircularProgress
 } from "@material-ui/core";
 import { Add, Search } from "@material-ui/icons";
@@ -22,8 +20,7 @@ class Company extends Component {
       companies: [],
       companySearch: "",
       openModal: false,
-      loading: true,
-      checked: true
+      loading: true
     };
   }
 
@@ -50,19 +47,14 @@ class Company extends Component {
   };
 
   handleSearchCompany = e => {
-    const { companySearch, checked } = this.state;
+    const { companySearch } = this.state;
 
     this.setState({ loading: true });
-    getCompanies(companySearch, checked).then(res => {
+    getCompanies(companySearch).then(res => {
       setTimeout(() => {
         this.setState({ companies: res.companies, loading: false });
       }, 500);
     });
-  };
-
-  switch = e => {
-    console.log(e.target.checked);
-    this.setState({ checked: !this.state.checked });
   };
 
   render() {
@@ -77,15 +69,6 @@ class Company extends Component {
             <Grid container spacing={16}>
               <Grid item sm={4} />
               <Grid item sm={3}>
-                <FormControlLabel
-                  control={
-                    <Switch
-                      checked={this.state.checked}
-                      onChange={this.switch}
-                    />
-                  }
-                  label="Notaria"
-                />
                 <Paper elevation={1} style={{ margin: "0 50px 30px 35px" }}>
                   <InputBase
                     placeholder="Buscar"

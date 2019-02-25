@@ -12,11 +12,11 @@ import estados from "../../helpers/states.json";
 
 const CardCompany = ({ company, goToCompany }) => (
   <Grid item md={3}>
-    <Card onClick={() => goToCompany(company)} className="pointer">
+    <Card onClick={() => goToCompany(company)} className="pointer link">
       <CardContent>
-        {/*<Typography align="left" color="textSecondary">
-          {company.kind}
-</Typography>*/}
+        <Typography align="right" color="textSecondary">
+          {company.key}
+        </Typography>
         <Typography variant="title" component="h5">
           {company.name ? company.name : `Lic. ${company.lawyer}`}
         </Typography>

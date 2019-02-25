@@ -139,6 +139,7 @@ class CallNew extends Component {
       history: history
     };
     call.record.push(record);
+    call.user = JSON.parse(localStorage.getItem("user"))._id;
 
     postCall(call).then(res => {
       this.setState({ message: res.msg, openMessage: true });

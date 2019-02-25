@@ -77,6 +77,13 @@ class NewCompany extends Component {
                 }
                 label="Compañia"
               />
+              <TextField
+                label="Clave"
+                name="key"
+                margin="normal"
+                onChange={this.handleChange}
+                fullWidth
+              />
               {company.kind === "COMPANY" ? (
                 <TextField
                   label="Nombre de la Compañia"
