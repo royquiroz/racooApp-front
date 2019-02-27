@@ -77,7 +77,7 @@ class NavBar extends Component {
               <Avatar
                 alt="profile_pic"
                 src={user.img_profile}
-                className="avatar"
+                className="avatar nav-avatar"
               />
             )}
           </Toolbar>

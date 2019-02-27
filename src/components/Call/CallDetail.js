@@ -21,6 +21,7 @@ import { Info } from "@material-ui/icons";
 import Selectv2 from "react-select";
 import moment from "moment";
 
+import Comments from "../Comments/Comments";
 import { getCallId, patchCallId, getClients } from "../../service";
 
 class CallDetail extends Component {
@@ -393,6 +394,11 @@ class CallDetail extends Component {
                 </Grid>
               </Grid>
             </form>
+            <Comments
+              callId={call._id}
+              comments={call.comments}
+              {...this.props}
+            />
             <Snackbar
               open={openMessage}
               autoCapitalize={1000}

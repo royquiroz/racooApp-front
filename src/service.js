@@ -330,3 +330,25 @@ export const patchCallId = (id, call) => {
       };
     });
 };
+
+//Servicios de alta y consulta de clientes
+export const postComment = comment => {
+  return axios
+    .post(`${base_url}/comment`, comment, { headers })
+    .then(res => {
+      return {
+        error: false,
+        comment: res.data.comment._id,
+        msg: res.data.msg
+      };
+    })
+    .catch(err => {
+      if (err.response.status === 403) {
+        signup();
+      }
+      return {
+        error: err.response.status,
+        msg: err.response.data.msg
+      };
+    });
+};

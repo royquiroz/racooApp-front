@@ -8,21 +8,9 @@ import ClientDetail from "./components/Client/ClientDetail";
 import Call from "./components/Call/Call";
 import CallDetail from "./components/Call/CallDetail";
 import CallNew from "./components/Call/CallNew";
-import Home from "./components/Home";
 
 const Router = () => (
   <Switch>
-    <Route
-      exact
-      path="/"
-      render={props =>
-        localStorage.getItem("token") ? (
-          <Home {...props} />
-        ) : (
-          <Redirect to="/login" />
-        )
-      }
-    />
     <Route
       exact
       path="/clients"
@@ -107,7 +95,7 @@ const Router = () => (
         !localStorage.getItem("token") ? (
           <Auth {...props} auth="login" />
         ) : (
-          <Redirect to="/" />
+          <Redirect to="/clients" />
         )
       }
     />
@@ -118,7 +106,7 @@ const Router = () => (
         !localStorage.getItem("token") ? (
           <Auth {...props} auth="signup" />
         ) : (
-          <Redirect to="/" />
+          <Redirect to="/clients" />
         )
       }
     />

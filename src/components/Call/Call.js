@@ -106,7 +106,7 @@ class Call extends Component {
     const { calls, loading, fromCalls, dates, viewDetails } = this.state;
 
     return (
-      <div className="container">
+      <div className="container calls-table">
         {loading ? (
           <CircularProgress />
         ) : (

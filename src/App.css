@@ -51,10 +51,13 @@
   margin-top: 2% !important;
 }
 
+.nav-avatar {
+  margin: 10px;
+}
+
 .avatar {
-  margin: 10;
-  width: 60;
-  height: 60;
+  width: 60px !important;
+  height: 60px !important;
 }
 
 .drawerList {
@@ -82,6 +85,10 @@
 
 .marginTabs {
   margin: 1% 0 3% 0;
+}
+
+.calls-table {
+  margin-top: 2%;
 }
 
 .chipsPositions {
@@ -122,9 +129,13 @@
 
 .link:hover {
   background-color: #ffebf1;
-  color: #ff1559;
+  color: #fedbe6;
   border-radius: 5px;
   padding: 1px 1.5px;
+}
+
+.link-words:hover {
+  color: #ff1559;
 }
 
 .telephone-client {
@@ -146,4 +157,43 @@
 
 .color-pending {
   background-color: rgba(255, 30, 30, 0.2);
+}
+
+.box-comments {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.paper-comments {
+  padding: 1%;
+}
+
+.comments-avatar {
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+}
+
+.separator-box-comments {
+  margin-bottom: 3% !important;
+}
+
+.separator-comments {
+  margin-bottom: 0.5% !important;
+}
+
+.p-comments {
+  margin: 1%;
+}
+
+.title-comments {
+  font-weight: bold;
+}
+
+.date-comments {
+  font-size: 12px;
+}
+
+.comments {
+  margin-bottom: 5%;
 }
