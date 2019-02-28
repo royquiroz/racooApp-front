@@ -20,14 +20,7 @@ const ListComments = ({ comment }) => (
             .fromNow()}
         </span>
       </Typography>
-      <Typography
-        variant="body2"
-        align="left"
-        className="p-comments"
-        gutterBottom
-      >
-        {comment.comment}
-      </Typography>
+      <pre className="comments">{comment.comment}</pre>
       <Divider />
     </Grid>
   </Grid>

@@ -24,7 +24,7 @@ const BoxComments = ({ comment, handleChange, handleSubmit }) => (
             onChange={handleChange}
           />
           <Button type="submit" variant="text" color="primary">
-            Guardar
+            Comentar
           </Button>
         </form>
       </Paper>

@@ -13,6 +13,17 @@ const Router = () => (
   <Switch>
     <Route
       exact
+      path="/"
+      render={props =>
+        localStorage.getItem("token") ? (
+          <Redirect to="/clients" />
+        ) : (
+          <Redirect to="/login" />
+        )
+      }
+    />
+    <Route
+      exact
       path="/clients"
       render={props =>
         localStorage.getItem("token") ? (
