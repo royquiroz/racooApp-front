@@ -14,6 +14,7 @@ import moment from "moment";
 import Report from "../Report/Report";
 import TableCalls from "../Tables/TableCalls";
 import { getCalls } from "../../service";
+import { filterCalls } from "../../helpers/filters";
 
 class Call extends Component {
   constructor() {
@@ -29,7 +30,8 @@ class Call extends Component {
       fromCalls: true,
       viewDetails: false,
       Callsfiltered: [],
-      isFilter: false
+      isFilter: false,
+      viewFilters: false
     };
   }
 
@@ -105,48 +107,22 @@ class Call extends Component {
     this.setState({ viewDetails: !viewDetails });
   };
 
-  handleFilter = (status, kind, system) => {
-    if (status === "" && kind === "" && system === "") {
+  handleViewFilters = e => {
+    const { viewFilters } = this.state;
+
+    this.setState({ viewFilters: !viewFilters });
+  };
+
+  handleFilter = (status, kind, system, user) => {
+    if (status === "" && kind === "" && system === "" && user === "") {
       this.setState({ isFilter: false });
     } else {
       this.setState({
         isFilter: true,
         Callsfiltered: this.state.calls.filter(call =>
-          this.filterCalls(call, status, kind, system)
+          filterCalls(call, status, kind, system, user)
         )
       });
-    }
-  };
-
-  filterCalls = (call, status, kind, system) => {
-    if (status !== "" && kind === "" && system === "") {
-      return call.status === status;
-    }
-
-    if (status === "" && kind !== "" && system === "") {
-      return call.kind === kind;
-    }
-
-    if (status === "" && kind === "" && system !== "") {
-      return call.system === system;
-    }
-
-    if (status !== "" && kind !== "" && system === "") {
-      return call.status === status && call.kind === kind;
-    }
-
-    if (status === "" && kind !== "" && system !== "") {
-      return call.kind === kind && call.system === system;
-    }
-
-    if (status !== "" && kind === "" && system !== "") {
-      return call.status === status && call.system === system;
-    }
-
-    if (status !== "" && kind !== "" && system !== "") {
-      return (
-        call.status === status && call.kind === kind && call.system === system
-      );
     }
   };
 
@@ -158,9 +134,9 @@ class Call extends Component {
       dates,
       viewDetails,
       Callsfiltered,
-      isFilter
+      isFilter,
+      viewFilters
     } = this.state;
-    //console.log(calls);
 
     return (
       <div className="container calls-table">
@@ -197,16 +173,23 @@ class Call extends Component {
                   <Search />
                 </IconButton>
               </Grid>
-              <Grid item sm={1} />
-              <Grid item sm={2}>
+              <Grid item sm={1}>
+                <FormControlLabel
+                  control={<Switch onChange={this.handleViewFilters} />}
+                  label="Filtros"
+                />
+              </Grid>
+              <Grid item sm={1}>
                 <FormControlLabel
                   control={<Switch onChange={this.handleViewDetails} />}
-                  label="Ver Detalles"
+                  label="Detalles"
                 />
               </Grid>
             </Grid>
 
-            <Report handleFilter={this.handleFilter} />
+            {viewFilters ? (
+              <Report handleFilter={this.handleFilter} date={dates} />
+            ) : null}
 
             <Grid container spacing={24}>
               <Grid item sm={12}>

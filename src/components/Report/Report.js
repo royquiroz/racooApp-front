@@ -7,6 +7,8 @@ import {
   OutlinedInput,
   MenuItem
 } from "@material-ui/core";
+import moment from "moment";
+import { getUsers } from "../../service";
 
 class Report extends Component {
   constructor() {
@@ -15,9 +17,17 @@ class Report extends Component {
       calls: {
         status: "",
         kind: "",
-        system: ""
-      }
+        system: "",
+        user: ""
+      },
+      users: []
     };
+  }
+
+  componentWillMount() {
+    getUsers().then(res => {
+      this.setState({ users: res.users });
+    });
   }
 
   handleChange = e => {
@@ -34,7 +44,8 @@ class Report extends Component {
     this.props.handleFilter(
       this.state.calls.status,
       this.state.calls.kind,
-      this.state.calls.system
+      this.state.calls.system,
+      this.state.calls.user
     );
   };
 
@@ -130,6 +141,36 @@ class Report extends Component {
             </Select>
           </FormControl>
         </Grid>
+
+        {moment(this.props.date.init).isSameOrAfter("2019-02-25") ? (
+          <Grid item sm={2}>
+            <FormControl variant="outlined" fullWidth>
+              <InputLabel htmlFor="outlined-user-simple">Consultor</InputLabel>
+              <Select
+                align="left"
+                name="user"
+                value={this.state.calls.user}
+                onChange={this.changeProps}
+                input={
+                  <OutlinedInput
+                    labelWidth={120}
+                    name="user"
+                    id="outlined-user-simple"
+                  />
+                }
+              >
+                <MenuItem value="">
+                  <em>Ninguno</em>
+                </MenuItem>
+                {this.state.users.map((user, i) => (
+                  <MenuItem key={i} value={user._id}>
+                    {user.name}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Grid>
+        ) : null}
       </Grid>
     );
   }
