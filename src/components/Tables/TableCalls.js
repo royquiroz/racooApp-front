@@ -8,6 +8,7 @@ import {
   TableFooter,
   TablePagination
 } from "@material-ui/core";
+import { Link } from "@material-ui/icons";
 import moment from "moment";
 
 class TableCalls extends Component {
@@ -76,6 +77,7 @@ class TableCalls extends Component {
             <TableCell>Estatus</TableCell>
             <TableCell>Resultado</TableCell>
             <TableCell>Fecha</TableCell>
+            <TableCell>Asana</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -133,12 +135,23 @@ class TableCalls extends Component {
                     : "Productiva"}
                 </TableCell>
                 <TableCell>{moment(call.created_at).format("L")}</TableCell>
+                <TableCell>
+                  {call.link ? (
+                    <a
+                      target="_blank"
+                      href={call.link}
+                      rel="noopener noreferrer"
+                    >
+                      <Link />
+                    </a>
+                  ) : null}
+                </TableCell>
               </TableRow>
             ))}
 
           {viewDetails ? (
             <TableRow>
-              <TableCell align="right" colSpan={fromCalls ? 7 : 5}>
+              <TableCell align="right" colSpan={fromCalls ? 8 : 6}>
                 Total de llamadas:
               </TableCell>
               <TableCell align="center">{calls.length}</TableCell>
@@ -147,7 +160,7 @@ class TableCalls extends Component {
 
           {viewDetails ? (
             <TableRow>
-              <TableCell align="right" colSpan={fromCalls ? 4 : 2}>
+              <TableCell align="right" colSpan={fromCalls ? 5 : 3}>
                 Ventas: {calls.filter(call => call.status === "SALES").length}
               </TableCell>
               <TableCell align="center">
@@ -174,7 +187,7 @@ class TableCalls extends Component {
 
           {viewDetails ? (
             <TableRow>
-              <TableCell align="right" colSpan={fromCalls ? 6 : 4}>
+              <TableCell align="right" colSpan={fromCalls ? 7 : 5}>
                 Llamadas: {calls.filter(call => call.kind === "CALL").length}
               </TableCell>
               <TableCell align="center">
@@ -188,7 +201,7 @@ class TableCalls extends Component {
 
           {viewDetails ? (
             <TableRow>
-              <TableCell align="center" colSpan={fromCalls ? 2 : 0}>
+              <TableCell align="center" colSpan={fromCalls ? 3 : 1}>
                 Minotaria:{" "}
                 {calls.filter(call => call.system === "MINOTARIA").length}
               </TableCell>
@@ -206,7 +219,7 @@ class TableCalls extends Component {
               <TableCell align="center">
                 UIF: {calls.filter(call => call.system === "UIF").length}
               </TableCell>
-              <TableCell align="center" colSpan={fromCalls ? 2 : 0}>
+              <TableCell align="center" colSpan={fromCalls ? 3 : 1}>
                 Racoo Notarios:{" "}
                 {calls.filter(call => call.system === "RACOO NOTARIOS").length}
               </TableCell>
@@ -218,7 +231,7 @@ class TableCalls extends Component {
             <TablePagination
               labelRowsPerPage="Registros por Pagina"
               rowsPerPageOptions={[5, 10, 50, 100]}
-              colSpan={7}
+              colSpan={8}
               count={calls.length}
               rowsPerPage={rowsPerPage}
               page={page}

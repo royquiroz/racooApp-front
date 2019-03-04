@@ -1,12 +1,5 @@
 import React, { Component } from "react";
-import {
-  Fab,
-  Dialog,
-  DialogContent,
-  DialogActions,
-  Button,
-  TextField
-} from "@material-ui/core";
+import { Fab, Dialog, DialogContent, TextField } from "@material-ui/core";
 import { InsertLink } from "@material-ui/icons";
 
 class CallLink extends Component {
@@ -46,14 +39,11 @@ class CallLink extends Component {
               name="link"
               label="Link Asana"
               type="text"
+              value={this.props.link}
+              onChange={this.props.handleChange}
               fullWidth
             />
           </DialogContent>
-          <DialogActions>
-            <Button onClick={this.handleClose} color="primary">
-              Close
-            </Button>
-          </DialogActions>
         </Dialog>
       </div>
     );

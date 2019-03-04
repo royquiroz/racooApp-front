@@ -18,19 +18,19 @@ import {
   Snackbar
 } from "@material-ui/core";
 import { Info } from "@material-ui/icons";
-import Selectv2 from "react-select";
 import moment from "moment";
 
 import Comments from "../Comments/Comments";
 import CallLink from "./Link/Link";
-import { getCallId, patchCallId, getClients } from "../../service";
+import { getCallId, patchCallId } from "../../service";
 
 class CallDetail extends Component {
   constructor() {
     super();
     this.state = {
-      call: {},
-      clients: [],
+      call: {
+        link: ""
+      },
       loading: true,
       message: "",
       openMessage: false,
@@ -42,20 +42,7 @@ class CallDetail extends Component {
   componentWillMount() {
     const { match } = this.props;
     getCallId(match.params.id).then(res => {
-      this.setState({ call: res.call });
-    });
-
-    getClients("").then(res => {
-      res.clients.forEach(client => {
-        client.value = client._id;
-        client.company.number
-          ? (client.label = `${client.name} (Notaria ${client.company.number})`)
-          : (client.label = `${client.name} (${client.company.name})`);
-      });
-
-      setTimeout(() => {
-        this.setState({ clients: res.clients, loading: false });
-      }, 500);
+      this.setState({ call: res.call, loading: false });
     });
   }
 
@@ -63,15 +50,6 @@ class CallDetail extends Component {
     let { indexHistory } = this.state;
     indexHistory === i ? (indexHistory = "") : (indexHistory = i);
     this.setState({ indexHistory: indexHistory });
-  };
-
-  handleSelect = e => {
-    const { call } = this.state;
-
-    call.client = e._id;
-    call.company = e.company._id;
-
-    this.setState({ call: call });
   };
 
   handleChange = e => {
@@ -157,7 +135,6 @@ class CallDetail extends Component {
   render() {
     const {
       call,
-      clients,
       loading,
       message,
       openMessage,
@@ -199,19 +176,6 @@ class CallDetail extends Component {
               <p>{moment(call.created_at).format("LLLL")}</p>
             </div>
             <form onSubmit={this.handleSubmit}>
-              <Grid container spacing={24}>
-                <Grid item sm={4}>
-                  <Selectv2
-                    className="text-left"
-                    defaultValue={call.client._id}
-                    placeholder="Cliente"
-                    isSearchable
-                    name="client"
-                    options={clients}
-                    onChange={this.handleSelect}
-                  />
-                </Grid>
-              </Grid>
               <Grid container spacing={24}>
                 <Grid item sm={6}>
                   <TextField
@@ -374,7 +338,7 @@ class CallDetail extends Component {
                 </Grid>
                 <Grid item sm={10} />
                 <Grid item sm={1}>
-                  {/*<CallLink />*/}
+                  <CallLink link={call.link} handleChange={this.handleChange} />
                 </Grid>
               </Grid>
 

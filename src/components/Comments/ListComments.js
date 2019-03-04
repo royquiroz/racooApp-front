@@ -1,6 +1,7 @@
 import React from "react";
 import { Grid, Avatar, Typography, Divider } from "@material-ui/core";
 import moment from "moment";
+import Linkify from "react-linkify";
 
 const ListComments = ({ comment }) => (
   <Grid container spacing={8} className="separator-comments">
@@ -20,7 +21,9 @@ const ListComments = ({ comment }) => (
             .fromNow()}
         </span>
       </Typography>
-      <pre className="comments">{comment.comment}</pre>
+      <Linkify>
+        <pre className="comments">{comment.comment}</pre>
+      </Linkify>
       <Divider />
     </Grid>
   </Grid>
