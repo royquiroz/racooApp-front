@@ -22,6 +22,7 @@ import Selectv2 from "react-select";
 import moment from "moment";
 
 import Comments from "../Comments/Comments";
+import CallLink from "./Link/Link";
 import { getCallId, patchCallId, getClients } from "../../service";
 
 class CallDetail extends Component {
@@ -370,6 +371,10 @@ class CallDetail extends Component {
                   <IconButton onClick={this.toggleRecord}>
                     <Info />
                   </IconButton>
+                </Grid>
+                <Grid item sm={10} />
+                <Grid item sm={1}>
+                  {/*<CallLink />*/}
                 </Grid>
               </Grid>
 
