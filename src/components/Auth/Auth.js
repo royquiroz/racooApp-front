@@ -1,6 +1,8 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 import { Grid, Paper, TextField, Button, Snackbar } from "@material-ui/core";
 import { register, login } from "../../service";
+import Logo from "../../logo.png";
 
 class Auth extends Component {
   constructor() {
@@ -67,6 +69,7 @@ class Auth extends Component {
           </Grid>
           <Grid item xs={4}>
             <Paper className="auth" elevation={6}>
+              <img src={Logo} alt="logo" style={{ width: "350px" }} />
               <form
                 onSubmit={
                   this.props.auth === "login"
@@ -120,6 +123,14 @@ class Auth extends Component {
                 </Button>
               </form>
             </Paper>
+            <Button
+              color="secondary"
+              className="button"
+              component={Link}
+              to={`/restore`}
+            >
+              ¿Has olvidado la contraseña?
+            </Button>
           </Grid>
           <Grid item xs>
             &nbsp;

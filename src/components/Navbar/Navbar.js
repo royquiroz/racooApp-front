@@ -10,7 +10,7 @@ import {
   Avatar
 } from "@material-ui/core";
 import ListMenu from "./Menu";
-import Logo from "../../logo.png";
+import Logo from "../../logo_min.png";
 
 class NavBar extends Component {
   constructor() {

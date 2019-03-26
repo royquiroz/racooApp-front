@@ -1,6 +1,7 @@
 import React from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
 import Auth from "./components/Auth/Auth";
+import Restore from "./components/Auth/Restore";
 import Company from "./components/Company/Company";
 import CompanyDetail from "./components/Company/CompanyDetail";
 import Client from "./components/Client/Client";
@@ -116,6 +117,17 @@ const Router = () => (
       render={props =>
         !localStorage.getItem("token") ? (
           <Auth {...props} auth="signup" />
+        ) : (
+          <Redirect to="/clients" />
+        )
+      }
+    />
+    <Route
+      exact
+      path="/restore"
+      render={props =>
+        !localStorage.getItem("token") ? (
+          <Restore {...props} />
         ) : (
           <Redirect to="/clients" />
         )

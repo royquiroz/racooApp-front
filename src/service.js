@@ -53,6 +53,48 @@ export const signup = () => {
   window.location.reload();
 };
 
+//Servicios de restauracion de contraseñas
+export const searchEmail = email => {
+  return axios
+    .post(`${base_url}/restore/search`, email)
+    .then(res => {
+      return {
+        error: false,
+        user: res.data.user
+      };
+    })
+    .catch(err => {
+      if (err.response.status === 403) {
+        signup();
+      }
+      return {
+        error: err.response.status,
+        msg: err.response.data.msg
+      };
+    });
+};
+
+export const changePassword = user => {
+  return axios
+    .post(`${base_url}/restore/change`, user)
+    .then(res => {
+      return {
+        error: false,
+        user: res.data.user,
+        msg: res.data.msg
+      };
+    })
+    .catch(err => {
+      if (err.response.status === 403) {
+        signup();
+      }
+      return {
+        error: err.response.status,
+        msg: err.response.data.msg
+      };
+    });
+};
+
 //Servicios de alta y consulta de compañias
 export const getCompanies = (name, checked) => {
   return axios
