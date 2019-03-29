@@ -71,6 +71,7 @@ class Restore extends Component {
                 variant="filled"
                 fullWidth
                 onChange={this.handleChange}
+                disabled={user ? true : false}
               />
               {user ? (
                 <TextField

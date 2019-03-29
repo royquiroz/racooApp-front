@@ -80,7 +80,7 @@ class ClientDetail extends Component {
                 <ClientCalls client={client} {...this.props} />
               </div>
             )}
-            <Fab
+            {/*<Fab
               className="fab"
               size="large"
               color="primary"
@@ -93,7 +93,7 @@ class ClientDetail extends Component {
               openModal={openModal}
               handleClose={this.handleClose}
               {...this.props}
-            />
+            />*/}
           </div>
         )}
       </div>
