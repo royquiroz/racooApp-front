@@ -9,6 +9,7 @@ import ClientDetail from "./components/Client/ClientDetail";
 import Call from "./components/Call/Call";
 import CallDetail from "./components/Call/CallDetail";
 import CallNew from "./components/Call/CallNew";
+import Sos from "./components/Sos/Sos";
 
 const Router = () => (
   <Switch>
@@ -130,6 +131,17 @@ const Router = () => (
           <Restore {...props} />
         ) : (
           <Redirect to="/clients" />
+        )
+      }
+    />
+    <Route
+      exact
+      path="/sos"
+      render={props =>
+        localStorage.getItem("token") ? (
+          <Sos {...props} />
+        ) : (
+          <Redirect to="/login" />
         )
       }
     />

@@ -415,3 +415,25 @@ export const getUsers = () => {
       };
     });
 };
+
+//Servicio de sos
+export const getSos = () => {
+  return axios
+    .get(`${base_url}/sos`, { headers })
+    .then(res => {
+      return {
+        error: false,
+        sos: res.data.sos,
+        msg: res.data.msg
+      };
+    })
+    .catch(err => {
+      if (err.response.status === 403) {
+        signup();
+      }
+      return {
+        error: err.response.status,
+        msg: err.response.data.msg
+      };
+    });
+};
