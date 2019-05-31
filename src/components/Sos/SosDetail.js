@@ -22,16 +22,13 @@ import Selectv2 from "react-select";
 import moment from "moment";
 
 import Comments from "../Comments/Comments";
-import CallLink from "./Link/Link";
-import { getCallId, patchCallId, getClients } from "../../service";
+import { getSosId, patchCallId, getClients } from "../../service";
 
-class CallDetail extends Component {
+class SosDetail extends Component {
   constructor() {
     super();
     this.state = {
-      call: {
-        link: ""
-      },
+      call: {},
       clients: [],
       loading: true,
       message: "",
@@ -43,7 +40,7 @@ class CallDetail extends Component {
 
   componentWillMount() {
     const { match } = this.props;
-    getCallId(match.params.id).then(res => {
+    getSosId(match.params.id).then(res => {
       this.setState({ call: res.call, loading: false });
     });
 
@@ -365,10 +362,7 @@ class CallDetail extends Component {
                     <Info />
                   </IconButton>
                 </Grid>
-                <Grid item sm={10} />
-                <Grid item sm={1}>
-                  <CallLink link={call.link} handleChange={this.handleChange} />
-                </Grid>
+                <Grid item sm={11} />
               </Grid>
 
               <Grid container spacing={24}>
@@ -410,4 +404,4 @@ class CallDetail extends Component {
   }
 }
 
-export default CallDetail;
+export default SosDetail;

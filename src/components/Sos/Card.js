@@ -14,7 +14,7 @@ const CardSos = ({ sos }) => {
       <Card className="pointer link">
         <CardContent>
           <Typography variant="title" component="h5">
-            {sos.name}
+            {sos.user}
           </Typography>
           <Typography color="textSecondary">{sos.company}</Typography>
           <Typography variant="body2" component="p">

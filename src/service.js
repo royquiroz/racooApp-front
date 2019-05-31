@@ -437,3 +437,24 @@ export const getSos = () => {
       };
     });
 };
+
+export const getSosId = id => {
+  return axios
+    .get(`${base_url}/sos/${id}`, { headers })
+    .then(res => {
+      return {
+        error: false,
+        sos: res.data.sos,
+        msg: "Sos encontrado exitosamente"
+      };
+    })
+    .catch(err => {
+      if (err.response.status === 403) {
+        signup();
+      }
+      return {
+        error: err.response.status,
+        msg: err.response.data.msg
+      };
+    });
+};

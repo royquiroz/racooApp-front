@@ -3,15 +3,15 @@ import {
   AppBar,
   Tabs,
   Tab,
-  Fab,
+  //Fab,
   Typography,
   CircularProgress
 } from "@material-ui/core";
-import { Add, AssignmentTwoTone, PhoneTwoTone } from "@material-ui/icons";
+import { /*Add,*/ AssignmentTwoTone, PhoneTwoTone } from "@material-ui/icons";
 import { getClientId } from "../../service";
 import ClientData from "./ClientData";
 import ClientCalls from "./ClientCalls";
-import NewCall from "../Modal/NewCall";
+//import NewCall from "../Modal/NewCall";
 
 class ClientDetail extends Component {
   constructor() {
@@ -46,7 +46,7 @@ class ClientDetail extends Component {
   };
 
   render() {
-    const { client, value, loading, openModal } = this.state;
+    const { client, value, loading /*, openModal*/ } = this.state;
 
     return (
       <div className="container">
