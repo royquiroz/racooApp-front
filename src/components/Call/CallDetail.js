@@ -18,12 +18,11 @@ import {
   Snackbar
 } from "@material-ui/core";
 import { Info } from "@material-ui/icons";
-import Selectv2 from "react-select";
 import moment from "moment";
 
 import Comments from "../Comments/Comments";
 import CallLink from "./Link/Link";
-import { getCallId, patchCallId, getClients } from "../../service";
+import { getCallId, patchCallId } from "../../service";
 
 class CallDetail extends Component {
   constructor() {
@@ -32,7 +31,6 @@ class CallDetail extends Component {
       call: {
         link: ""
       },
-      clients: [],
       loading: true,
       message: "",
       openMessage: false,
@@ -45,19 +43,6 @@ class CallDetail extends Component {
     const { match } = this.props;
     getCallId(match.params.id).then(res => {
       this.setState({ call: res.call, loading: false });
-    });
-
-    getClients("").then(res => {
-      res.clients.forEach(client => {
-        client.value = client._id;
-        client.company.number
-          ? (client.label = `${client.name} (Notaria ${client.company.number})`)
-          : (client.label = `${client.name} (${client.company.name})`);
-      });
-
-      setTimeout(() => {
-        this.setState({ clients: res.clients, loading: false });
-      }, 500);
     });
   }
 
@@ -150,7 +135,6 @@ class CallDetail extends Component {
   render() {
     const {
       call,
-      clients,
       loading,
       message,
       openMessage,
@@ -192,19 +176,6 @@ class CallDetail extends Component {
               <p>{moment(call.created_at).format("LLLL")}</p>
             </div>
             <form onSubmit={this.handleSubmit}>
-              <Grid container spacing={24}>
-                <Grid item sm={4}>
-                  <Selectv2
-                    className="text-left"
-                    defaultValue={call.client._id}
-                    placeholder="Cliente"
-                    isSearchable
-                    name="client"
-                    options={clients}
-                    onChange={this.handleSelect}
-                  />
-                </Grid>
-              </Grid>
               <Grid container spacing={24}>
                 <Grid item sm={6}>
                   <TextField

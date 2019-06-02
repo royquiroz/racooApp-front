@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import {
   Grid,
   Card,
@@ -11,7 +12,7 @@ import {
 const CardSos = ({ sos }) => {
   return (
     <Grid item md={3}>
-      <Card className="pointer link">
+      <Card className="pointer">
         <CardContent>
           <Typography variant="title" component="h5">
             {sos.user}
@@ -22,7 +23,14 @@ const CardSos = ({ sos }) => {
           </Typography>
         </CardContent>
         <CardActions>
-          <Button color="secondary">Cargar</Button>
+          <Button
+            color="secondary"
+            component={Link}
+            size="small"
+            to={`/sos/${sos._id}`}
+          >
+            Ver Mas
+          </Button>
         </CardActions>
       </Card>
     </Grid>

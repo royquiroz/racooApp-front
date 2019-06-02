@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
 import {
   CircularProgress,
   Grid,
@@ -14,21 +13,24 @@ import {
   OutlinedInput,
   MenuItem,
   Button,
-  IconButton,
   Snackbar
 } from "@material-ui/core";
-import { Info } from "@material-ui/icons";
 import Selectv2 from "react-select";
 import moment from "moment";
 
-import Comments from "../Comments/Comments";
-import { getSosId, patchCallId, getClients } from "../../service";
+import {
+  getSosId,
+  getClients,
+  postCall,
+  patchClient,
+  patchSosId
+} from "../../service";
 
 class SosDetail extends Component {
   constructor() {
     super();
     this.state = {
-      call: {},
+      sos: {},
       clients: [],
       loading: true,
       message: "",
@@ -41,7 +43,10 @@ class SosDetail extends Component {
   componentWillMount() {
     const { match } = this.props;
     getSosId(match.params.id).then(res => {
-      this.setState({ call: res.call, loading: false });
+      res.sos.system = "";
+      res.sos.status = "";
+      res.sos.record = [];
+      this.setState({ sos: res.sos, loading: false });
     });
 
     getClients("").then(res => {
@@ -54,23 +59,40 @@ class SosDetail extends Component {
 
       setTimeout(() => {
         this.setState({ clients: res.clients, loading: false });
+        this.addUser();
       }, 500);
     });
   }
 
-  history = i => {
-    let { indexHistory } = this.state;
-    indexHistory === i ? (indexHistory = "") : (indexHistory = i);
-    this.setState({ indexHistory: indexHistory });
+  addUser = () => {
+    const { clients, sos } = this.state;
+
+    let message;
+    let client = clients.find(client => client.id_minotaria === sos.id_user);
+    client !== undefined ? (sos.client = client._id) : (sos.client = client);
+
+    client === undefined
+      ? (message = "El usuario no existe, hay que buscarlo manualmente")
+      : (message = "Existe usuario y se vinculo exitosamente");
+    this.setState({ sos: sos, message: message, openMessage: true });
+  };
+
+  handleSelect = e => {
+    const { sos } = this.state;
+
+    let message = "Se vinculo exitosamente el usuario";
+    sos.client = e._id;
+
+    this.setState({ sos: sos, message: message, openMessage: true });
   };
 
   handleChange = e => {
-    const { call } = this.state;
+    const { sos } = this.state;
 
     let field = e.target.name;
-    call[field] = e.target.value;
+    sos[field] = e.target.value;
 
-    this.setState({ call: call });
+    this.setState({ sos: sos });
   };
 
   handleClose = e => {
@@ -78,15 +100,15 @@ class SosDetail extends Component {
   };
 
   createHistory = () => {
-    let { call } = this.state;
+    let { sos } = this.state;
 
     let history = {
-      problema: call.problem,
-      solucion: call.solution,
-      sistema: call.system,
-      soporte: call.kind,
-      estatus: call.status,
-      resultado: call.ending
+      problema: sos.problem,
+      solucion: sos.solution,
+      sistema: sos.system,
+      soporte: sos.kind,
+      estatus: sos.status,
+      resultado: sos.ending
     };
 
     if (history.soporte === "CALL") {
@@ -116,14 +138,9 @@ class SosDetail extends Component {
     return history;
   };
 
-  toggleRecord = () => {
-    let { showRecord } = this.state;
-    this.setState({ showRecord: !showRecord });
-  };
-
   handleSubmit = e => {
     e.preventDefault();
-    let { call } = this.state;
+    let { sos } = this.state;
 
     let history = this.createHistory();
 
@@ -132,29 +149,39 @@ class SosDetail extends Component {
       update: moment().format(),
       history: history
     };
+    sos.record.push(record);
+    sos.user = JSON.parse(localStorage.getItem("user"))._id;
 
-    if (JSON.stringify(call.record[0].history) !== JSON.stringify(history)) {
-      call.record.unshift(record);
-    }
+    patchClient(sos.client, { id_minotaria: sos.id_user }).then(res => {
+      console.log(res.msg);
+    });
 
-    //call.user = JSON.parse(localStorage.getItem("user"))._id;
+    let id_sos = sos._id;
+    delete sos.company;
+    delete sos.isFinished;
+    delete sos.id_user;
+    delete sos.__v;
+    delete sos.created_at;
+    delete sos.updated_at;
+    delete sos._id;
 
-    patchCallId(call._id, call).then(res => {
+    postCall(sos).then(res => {
+      console.log(res);
+      patchSosId(id_sos, {
+        call: res.call,
+        isFinished: true
+      }).then(sos => {
+        console.log(sos);
+      });
       this.setState({ message: res.msg, openMessage: true });
+      setTimeout(() => {
+        this.props.history.push(`/call/${res.call}`);
+      }, 2000);
     });
   };
 
   render() {
-    const {
-      call,
-      clients,
-      loading,
-      message,
-      openMessage,
-      showRecord,
-      indexHistory
-    } = this.state;
-
+    const { sos, clients, loading, message, openMessage } = this.state;
     return (
       <div className="container">
         {loading ? (
@@ -162,38 +189,16 @@ class SosDetail extends Component {
         ) : (
           <div>
             <div>
-              <h1 style={{ margin: "0" }}>
-                <Link
-                  target="_blank"
-                  to={`/client/${call.client._id}`}
-                  className="link link-words"
-                >
-                  {call.client.name}
-                </Link>{" "}
-                <span className="telephone-client">
-                  Tel. {call.client.telephone} Ext. {call.client.extension}
-                </span>
-              </h1>
-              <h4 style={{ marginTop: "0" }}>
-                <Link
-                  target="_blank"
-                  to={`/company/${call.client.company._id}`}
-                  className="link link-words"
-                >
-                  {call.client.company.key}
-                </Link>{" "}
-                <span className="telephone-company">
-                  Tel. {call.client.company.telephone}
-                </span>
-              </h4>
-              <p>{moment(call.created_at).format("LLLL")}</p>
+              <h1 style={{ margin: "0" }}>{sos.user}</h1>
+              <h4 style={{ marginTop: "0" }}>{sos.company}</h4>
+              <p>{moment(sos.created_at).format("LLLL")}</p>
             </div>
             <form onSubmit={this.handleSubmit}>
               <Grid container spacing={24}>
+                <Grid item sm={3} />
                 <Grid item sm={4}>
                   <Selectv2
                     className="text-left"
-                    defaultValue={call.client._id}
                     placeholder="Cliente"
                     isSearchable
                     name="client"
@@ -201,6 +206,7 @@ class SosDetail extends Component {
                     onChange={this.handleSelect}
                   />
                 </Grid>
+                <Grid item sm={5} />
               </Grid>
               <Grid container spacing={24}>
                 <Grid item sm={6}>
@@ -209,7 +215,7 @@ class SosDetail extends Component {
                     name="problem"
                     multiline
                     rows="5"
-                    defaultValue={call.problem}
+                    defaultValue={sos.problem}
                     margin="normal"
                     variant="outlined"
                     fullWidth
@@ -222,7 +228,7 @@ class SosDetail extends Component {
                     name="solution"
                     multiline
                     rows="5"
-                    defaultValue={call.solution}
+                    defaultValue={sos.solution}
                     margin="normal"
                     variant="outlined"
                     fullWidth
@@ -240,7 +246,7 @@ class SosDetail extends Component {
                     <Select
                       align="left"
                       name="system"
-                      value={call.system}
+                      value={sos.system}
                       onChange={this.handleChange}
                       input={
                         <OutlinedInput
@@ -273,7 +279,7 @@ class SosDetail extends Component {
                     <Select
                       align="left"
                       name="kind"
-                      value={call.kind}
+                      value={sos.kind}
                       onChange={this.handleChange}
                       input={
                         <OutlinedInput
@@ -298,7 +304,7 @@ class SosDetail extends Component {
                     <Select
                       align="left"
                       name="status"
-                      value={call.status}
+                      value={sos.status}
                       onChange={this.handleChange}
                       input={
                         <OutlinedInput
@@ -330,7 +336,7 @@ class SosDetail extends Component {
                   <RadioGroup
                     aria-label="ending"
                     name="ending"
-                    defaultValue={call.ending}
+                    defaultValue={sos.ending}
                     onChange={this.handleChange}
                     row={true}
                   >
@@ -355,42 +361,7 @@ class SosDetail extends Component {
                   </Button>
                 </Grid>
               </Grid>
-
-              <Grid container spacing={24}>
-                <Grid item sm={1}>
-                  <IconButton onClick={this.toggleRecord}>
-                    <Info />
-                  </IconButton>
-                </Grid>
-                <Grid item sm={11} />
-              </Grid>
-
-              <Grid container spacing={24}>
-                <Grid item sm={12}>
-                  {showRecord ? (
-                    <ul className="list-records">
-                      {call.record.map((user, i) => (
-                        <li key={i} onClick={() => this.history(i)}>
-                          <span className="pointer">
-                            {user.user} - {moment(user.update).format("llll")}
-                          </span>{" "}
-                          {indexHistory === i ? (
-                            <div className="pre">
-                              {JSON.stringify(user.history, null, 2)}
-                            </div>
-                          ) : null}
-                        </li>
-                      ))}
-                    </ul>
-                  ) : null}
-                </Grid>
-              </Grid>
             </form>
-            <Comments
-              callId={call._id}
-              comments={call.comments}
-              {...this.props}
-            />
             <Snackbar
               open={openMessage}
               autoCapitalize={1000}

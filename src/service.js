@@ -270,7 +270,6 @@ export const patchClient = (id, client) => {
   return axios
     .patch(`${base_url}/client/${id}`, client, { headers })
     .then(res => {
-      console.log(res);
       return {
         error: false,
         client: res.data.client,
@@ -446,6 +445,27 @@ export const getSosId = id => {
         error: false,
         sos: res.data.sos,
         msg: "Sos encontrado exitosamente"
+      };
+    })
+    .catch(err => {
+      if (err.response.status === 403) {
+        signup();
+      }
+      return {
+        error: err.response.status,
+        msg: err.response.data.msg
+      };
+    });
+};
+
+export const patchSosId = (id, sos) => {
+  return axios
+    .patch(`${base_url}/sos/${id}`, sos, { headers })
+    .then(res => {
+      return {
+        error: false,
+        sos: res.data.sos,
+        msg: "Cambios guardados exitosamente"
       };
     })
     .catch(err => {

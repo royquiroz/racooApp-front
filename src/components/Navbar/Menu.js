@@ -15,7 +15,8 @@ import {
   PersonTwoTone,
   PhoneInTalkTwoTone,
   FaceTwoTone,
-  ExitToAppTwoTone
+  ExitToAppTwoTone,
+  HelpTwoTone
 } from "@material-ui/icons";
 import Logo from "../../logo.png";
 
@@ -76,6 +77,12 @@ class ListMenu extends Component {
                   <PhoneInTalkTwoTone />
                 </ListItemIcon>
                 <ListItemText primary="Llamadas" />
+              </ListItem>
+              <ListItem component={NavLink} to="/sos">
+                <ListItemIcon>
+                  <HelpTwoTone />
+                </ListItemIcon>
+                <ListItemText primary="SOS" />
               </ListItem>
             </List>
             <Divider />
