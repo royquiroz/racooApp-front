@@ -13,11 +13,14 @@ import {
   OutlinedInput,
   MenuItem,
   Button,
-  Snackbar
+  Snackbar,
+  Typography
 } from "@material-ui/core";
 import Selectv2 from "react-select";
 import moment from "moment";
 
+import NewCompany from "../Modal/NewCompany";
+import NewClient from "../Call/ClientNew";
 import {
   getSosId,
   getClients,
@@ -31,11 +34,14 @@ class SosDetail extends Component {
     super();
     this.state = {
       sos: {},
+      client: "",
       clients: [],
       loading: true,
       message: "",
       openMessage: false,
       showRecord: false,
+      openModalCompany: false,
+      openModalClient: false,
       indexHistory: ""
     };
   }
@@ -46,6 +52,8 @@ class SosDetail extends Component {
       res.sos.system = "";
       res.sos.status = "";
       res.sos.record = [];
+
+      if (res.sos.call) this.props.history.push(`/call/${res.sos.call}`);
       this.setState({ sos: res.sos, loading: false });
     });
 
@@ -67,14 +75,28 @@ class SosDetail extends Component {
   addUser = () => {
     const { clients, sos } = this.state;
 
-    let message;
+    let message, label;
     let client = clients.find(client => client.id_minotaria === sos.id_user);
     client !== undefined ? (sos.client = client._id) : (sos.client = client);
+    client !== undefined ? (label = client.label) : (label = "");
 
     client === undefined
       ? (message = "El usuario no existe, hay que buscarlo manualmente")
       : (message = "Existe usuario y se vinculo exitosamente");
-    this.setState({ sos: sos, message: message, openMessage: true });
+    this.setState({
+      sos: sos,
+      client: label,
+      message: message,
+      openMessage: true
+    });
+  };
+
+  openModalCompany = () => {
+    this.setState({ openModalCompany: true });
+  };
+
+  openModalClient = () => {
+    this.setState({ openModalClient: true });
   };
 
   handleSelect = e => {
@@ -82,8 +104,14 @@ class SosDetail extends Component {
 
     let message = "Se vinculo exitosamente el usuario";
     sos.client = e._id;
+    let label = e.label;
 
-    this.setState({ sos: sos, message: message, openMessage: true });
+    this.setState({
+      sos: sos,
+      client: label,
+      message: message,
+      openMessage: true
+    });
   };
 
   handleChange = e => {
@@ -96,7 +124,11 @@ class SosDetail extends Component {
   };
 
   handleClose = e => {
-    this.setState({ openMessage: false });
+    this.setState({
+      openMessage: false,
+      openModalCompany: false,
+      openModalClient: false
+    });
   };
 
   createHistory = () => {
@@ -166,7 +198,6 @@ class SosDetail extends Component {
     delete sos._id;
 
     postCall(sos).then(res => {
-      console.log(res);
       patchSosId(id_sos, {
         call: res.call,
         isFinished: true
@@ -181,7 +212,16 @@ class SosDetail extends Component {
   };
 
   render() {
-    const { sos, clients, loading, message, openMessage } = this.state;
+    const {
+      sos,
+      client,
+      clients,
+      loading,
+      message,
+      openMessage,
+      openModalCompany,
+      openModalClient
+    } = this.state;
     return (
       <div className="container">
         {loading ? (
@@ -189,6 +229,9 @@ class SosDetail extends Component {
         ) : (
           <div>
             <div>
+              <Typography variant="subtitle2">
+                {client ? `Asignado a ${client}` : ""}
+              </Typography>
               <h1 style={{ margin: "0" }}>{sos.user}</h1>
               <h4 style={{ marginTop: "0" }}>{sos.company}</h4>
               <p>{moment(sos.created_at).format("LLLL")}</p>
@@ -206,7 +249,27 @@ class SosDetail extends Component {
                     onChange={this.handleSelect}
                   />
                 </Grid>
-                <Grid item sm={5} />
+                <Grid item sm={1}>
+                  <Button variant="contained" onClick={this.openModalCompany}>
+                    Compañia
+                  </Button>
+                  <NewCompany
+                    openModal={openModalCompany}
+                    handleClose={this.handleClose}
+                    {...this.props}
+                  />
+                </Grid>
+                <Grid item sm={1}>
+                  <Button variant="contained" onClick={this.openModalClient}>
+                    Cliente
+                  </Button>
+                  <NewClient
+                    openModal={openModalClient}
+                    handleClose={this.handleClose}
+                    {...this.props}
+                  />
+                </Grid>
+                <Grid item sm={3} />
               </Grid>
               <Grid container spacing={24}>
                 <Grid item sm={6}>
