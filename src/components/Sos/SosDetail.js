@@ -33,6 +33,7 @@ import {
 class SosDetail extends Component {
   constructor() {
     super();
+    this.handleSubmit = this.handleSubmit.bind(this);
     this.state = {
       sos: {},
       client: "",
@@ -50,7 +51,6 @@ class SosDetail extends Component {
   componentWillMount() {
     const { match } = this.props;
     getSosId(match.params.id).then(res => {
-      res.sos.system = "";
       res.sos.status = "";
       res.sos.record = [];
 
@@ -186,46 +186,53 @@ class SosDetail extends Component {
     return history;
   };
 
-  handleSubmit = e => {
+  async handleSubmit(e) {
     e.preventDefault();
     let { sos } = this.state;
 
-    let history = this.createHistory();
+    const response = await getSosId(sos._id);
 
-    let record = {
-      user: JSON.parse(localStorage.getItem("user")).name,
-      update: moment().format(),
-      history: history
-    };
-    sos.record.push(record);
-    sos.user = JSON.parse(localStorage.getItem("user"))._id;
+    if (response.sos.call !== undefined) {
+      let message =
+        "No se puede crear la llamada porque ya se creo anteriormente";
+      this.setState({ message: message, openMessage: true });
+      this.props.history.push(`/call/${response.sos.call}`);
+    } else {
+      let history = this.createHistory();
 
-    patchClient(sos.client, { id_minotaria: sos.id_user }).then(res => {
-      console.log(res.msg);
-    });
+      let record = {
+        user: JSON.parse(localStorage.getItem("user")).name,
+        update: moment().format(),
+        history: history
+      };
+      sos.record.push(record);
+      sos.user = JSON.parse(localStorage.getItem("user"))._id;
 
-    let id_sos = sos._id;
-    delete sos.company;
-    delete sos.isFinished;
-    delete sos.id_user;
-    delete sos.__v;
-    delete sos.created_at;
-    delete sos.updated_at;
-    delete sos._id;
+      await patchClient(sos.client, { id_minotaria: sos.id_user });
 
-    postCall(sos).then(res => {
-      patchSosId(id_sos, {
-        call: res.call,
-        isFinished: true
-      }).then(sos => {
-        console.log(sos);
+      let id_sos = sos._id;
+      delete sos.company;
+      delete sos.isFinished;
+      delete sos.id_user;
+      delete sos.__v;
+      delete sos.created_at;
+      delete sos.updated_at;
+      delete sos._id;
+
+      postCall(sos).then(res => {
+        patchSosId(id_sos, {
+          call: res.call,
+          isFinished: true
+        }).then(sos => {
+          console.log(sos);
+        });
+        this.setState({ message: res.msg, openMessage: true });
+        setTimeout(() => {
+          this.props.history.push(`/call/${res.call}`);
+        }, 2000);
       });
-      this.setState({ message: res.msg, openMessage: true });
-      setTimeout(() => {
-        this.props.history.push(`/call/${res.call}`);
-      }, 2000);
-    });
-  };
+    }
+  }
 
   render() {
     const {
@@ -238,7 +245,6 @@ class SosDetail extends Component {
       openModalCompany,
       openModalClient
     } = this.state;
-    console.log(sos);
 
     return (
       <div className="container">
