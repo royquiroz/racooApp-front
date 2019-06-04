@@ -45,6 +45,7 @@ class CallNew extends Component {
 
   componentWillMount() {
     this.searchClients();
+    console.log(this.props);
   }
 
   searchClients = () => {

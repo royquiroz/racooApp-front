@@ -16,6 +16,7 @@ import {
   Snackbar,
   Typography
 } from "@material-ui/core";
+import { Refresh } from "@material-ui/icons";
 import Selectv2 from "react-select";
 import moment from "moment";
 
@@ -71,6 +72,21 @@ class SosDetail extends Component {
       }, 500);
     });
   }
+
+  reloadClients = () => {
+    getClients("").then(res => {
+      res.clients.forEach(client => {
+        client.value = client._id;
+        client.company.number
+          ? (client.label = `${client.name} (Notaria ${client.company.number})`)
+          : (client.label = `${client.name} (${client.company.name})`);
+      });
+
+      setTimeout(() => {
+        this.setState({ clients: res.clients, loading: false });
+      }, 500);
+    });
+  };
 
   addUser = () => {
     const { clients, sos } = this.state;
@@ -222,6 +238,8 @@ class SosDetail extends Component {
       openModalCompany,
       openModalClient
     } = this.state;
+    console.log(sos);
+
     return (
       <div className="container">
         {loading ? (
@@ -237,40 +255,47 @@ class SosDetail extends Component {
               <p>{moment(sos.created_at).format("LLLL")}</p>
             </div>
             <form onSubmit={this.handleSubmit}>
-              <Grid container spacing={24}>
-                <Grid item sm={3} />
-                <Grid item sm={4}>
-                  <Selectv2
-                    className="text-left"
-                    placeholder="Cliente"
-                    isSearchable
-                    name="client"
-                    options={clients}
-                    onChange={this.handleSelect}
-                  />
+              {sos.client === undefined ? (
+                <Grid container spacing={24}>
+                  <Grid item sm={3} />
+                  <Grid item sm={4}>
+                    <Selectv2
+                      className="text-left"
+                      placeholder="Cliente"
+                      isSearchable
+                      name="client"
+                      options={clients}
+                      onChange={this.handleSelect}
+                    />
+                  </Grid>
+                  <Grid item sm={1}>
+                    <Button variant="contained" onClick={this.openModalCompany}>
+                      Compañia
+                    </Button>
+                    <NewCompany
+                      openModal={openModalCompany}
+                      handleClose={this.handleClose}
+                      sos={sos._id}
+                    />
+                  </Grid>
+                  <Grid item sm={1}>
+                    <Button variant="contained" onClick={this.openModalClient}>
+                      Cliente
+                    </Button>
+                    <NewClient
+                      openModal={openModalClient}
+                      handleClose={this.handleClose}
+                      sos={sos._id}
+                    />
+                  </Grid>
+                  <Grid item sm={1}>
+                    <Button variant="contained" onClick={this.reloadClients}>
+                      <Refresh />
+                    </Button>
+                  </Grid>
+                  <Grid item sm={2} />
                 </Grid>
-                <Grid item sm={1}>
-                  <Button variant="contained" onClick={this.openModalCompany}>
-                    Compañia
-                  </Button>
-                  <NewCompany
-                    openModal={openModalCompany}
-                    handleClose={this.handleClose}
-                    {...this.props}
-                  />
-                </Grid>
-                <Grid item sm={1}>
-                  <Button variant="contained" onClick={this.openModalClient}>
-                    Cliente
-                  </Button>
-                  <NewClient
-                    openModal={openModalClient}
-                    handleClose={this.handleClose}
-                    {...this.props}
-                  />
-                </Grid>
-                <Grid item sm={3} />
-              </Grid>
+              ) : null}
               <Grid container spacing={24}>
                 <Grid item sm={6}>
                   <TextField
