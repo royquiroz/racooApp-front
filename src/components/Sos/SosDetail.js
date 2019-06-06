@@ -196,7 +196,9 @@ class SosDetail extends Component {
       let message =
         "No se puede crear la llamada porque ya se creo anteriormente";
       this.setState({ message: message, openMessage: true });
-      this.props.history.push(`/call/${response.sos.call}`);
+      setTimeout(() => {
+        this.props.history.push(`/call/${response.sos.call}`);
+        }, 3000);
     } else {
       let history = this.createHistory();
 
